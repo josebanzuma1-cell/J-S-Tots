@@ -99,6 +99,59 @@ All tokens live at the top of `assets/css/style.css`.
   the parent presses send inside WhatsApp.** There is no server and no database, so
   no personal data is stored anywhere.
 
+## Motion
+
+### The hero and the sheet
+
+On the home page the hero **pins** and the rest of the page rides up over it. That
+overlap is plain `position: sticky` plus stacking order, not an animation, so it
+works in every browser.
+
+It needs one piece of markup: everything below the hero lives in a single
+`<div class="after-hero">` wrapper. It cannot be done per-section — the sections are
+transparent, so a pinned hero would show straight through them. **If you add a
+section to `index.html`, put it inside that wrapper.**
+
+As the sheet climbs, the hero recedes behind it: the wording lifts and fades, the
+card dims and settles back, and the picture pushes in slowly. Three layers at three
+speeds, which is what makes it read as depth rather than as a fade.
+
+The timeline for that comes from `.after-hero`, not from the hero itself. A pinned
+element never moves, so its own view timeline sits at progress 0 for the whole page;
+measuring the sheet climbing over it gives the motion something that actually
+travels, and it finishes exactly as the hero disappears. That needs
+`timeline-scope: --cover` on `main`, because the hero is a *preceding* sibling of the
+element declaring the timeline.
+
+### Playful touches
+
+It is a pre-school, so nothing lands quite flat. `--ease-pop` overshoots a little and
+drives the scroll reveals, the class chips spring to size one after another, the
+hand-drawn doodles drift on a slow loop, icons shake when you point at them, and
+buttons squash when pressed.
+
+The doodle drift is the only thing on the page that never stops. It is two small
+SVGs, transform-only and on the compositor — but if the page ever starts to feel
+busy, that is the first thing to drop. The doodles are also pulled in at phone widths
+(`max-width: 620px`), because hanging outside their box plus the bob's rotation put
+them a few pixels past the screen edge.
+
+### The two guards
+
+1. Every animation rule sits inside `@media (prefers-reduced-motion: no-preference)`,
+   so anyone who has asked their system to reduce motion gets a still page. The
+   overlap still works for them, because sticky positioning is not an animation.
+2. The scroll-linked rules *also* sit inside `@supports (animation-timeline: view())`,
+   and **that guard is load-bearing, not politeness.** A browser that does not know
+   `animation-timeline` would drop that one declaration, keep the rest, run the
+   keyframes on the document timeline with no duration, and leave the hero parked at
+   its end state — a card at opacity 0.2 with invisible headline text. Guarded, those
+   browsers get the overlap without the dimming, which still looks deliberate.
+
+Ranges are written against the sheet's own travel (`entry 15% entry 100%`) rather
+than in pixels, so the effect keeps its shape on a phone and on a desktop with no
+media query of its own.
+
 ## Accessibility notes
 
 Skip link, one `h1` per page, `aria-current` on the active nav item, labelled form

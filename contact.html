@@ -152,8 +152,28 @@
     <div class="wrap">
       <div class="split is-reversed">
         <div class="split-media reveal">
-          <img src="assets/img/illus-hero.svg" alt="The school building with children playing outside" width="1200" height="740"
-               style="aspect-ratio:4/3;object-fit:cover">
+          <!-- ===================================================================
+               SCHOOL LOCATION — defined only here, in the three URLs below.
+
+               All three currently centre on Munyonyo as a neighbourhood, NOT on
+               the school. Searching for "Munyonyo Church of Uganda" was tried and
+               rejected: Google resolves it to Kitintale, the wrong part of town.
+               A text search can land anywhere, so this needs real coordinates.
+
+               To use the school's own pin, replace all three occurrences of
+                   Munyonyo%2C%20Kampala%2C%20Uganda
+               with the coordinates, e.g.  0.2567%2C32.6210
+               (that is "lat,lng" with the comma written as %2C).
+               Then drop the caveat in the note below. No API key is needed.
+               =================================================================== -->
+          <div class="map-embed">
+            <iframe
+              title="Map of Munyonyo, Kampala, the area J &amp; S Tots Pre-School is in"
+              src="https://www.google.com/maps?q=Munyonyo%2C%20Kampala%2C%20Uganda&amp;z=16&amp;hl=en&amp;output=embed"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen></iframe>
+          </div>
         </div>
         <div class="reveal reveal-d1">
           <p class="eyebrow eyebrow-dot">Finding us</p>
@@ -162,11 +182,14 @@
           <p>Coming by boda or taxi, ask for Munyonyo C.O.U. Church and get down there. Driving, there is somewhere to pull in at drop-off and pick-up time.</p>
           <p>If you get turned around, call <a href="tel:+256774197708" style="text-decoration:underline">0774 197 708</a> and we will talk you in.</p>
           <div class="btn-row">
-            <a class="btn btn-dark" href="https://www.google.com/maps/search/?api=1&amp;query=Munyonyo%20Church%20of%20Uganda%2C%20Kampala" target="_blank" rel="noopener">
-              Open in Google Maps <span class="arrow" aria-hidden="true">→</span>
+            <a class="btn btn-dark" href="https://www.google.com/maps/dir/?api=1&amp;destination=Munyonyo%2C%20Kampala%2C%20Uganda" target="_blank" rel="noopener">
+              Get directions <span class="arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&amp;query=Munyonyo%2C%20Kampala%2C%20Uganda" target="_blank" rel="noopener">
+              Open in Google Maps
             </a>
           </div>
-          <p class="form-note">The map link searches for Munyonyo C.O.U. Church, our landmark. Replace it with the school's own pin once you have one.</p>
+          <p class="form-note">The map shows Munyonyo, the area we are in — not the school gate itself. Please call and we will guide you the last part of the way.</p>
         </div>
       </div>
     </div>

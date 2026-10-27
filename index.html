@@ -61,6 +61,12 @@
     </div>
   </section>
 
+  <!-- Everything below the hero rides over it as one opaque sheet
+       (.after-hero in style.css). It has to be a single wrapper:
+       the sections are transparent, so a pinned hero would show
+       straight through them. Deliberately not re-indented, to keep
+       the diff readable. -->
+  <div class="after-hero">
   <!-- ============================================= why choose us, icon row -->
   <section class="section">
     <div class="wrap">
@@ -340,6 +346,7 @@
     </div>
   </section>
 
+  </div>
 </main>
 
 <footer class="footer">

@@ -59,6 +59,7 @@
   --lede-size: clamp(1.02rem, 1.35vw, 1.2rem);
 
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoots, for springier motion */
 }
 
 /* --------------------------------------------------- base */
@@ -198,7 +199,7 @@ li { margin-bottom: 0.45em; }
   cursor: pointer;
   transition: transform 0.25s var(--ease), background-color 0.25s var(--ease),
               color 0.25s var(--ease), box-shadow 0.25s var(--ease),
-              border-color 0.25s var(--ease);
+              border-color 0.25s var(--ease), scale 0.18s var(--ease);
   white-space: nowrap;
 }
 
@@ -341,7 +342,19 @@ li { margin-bottom: 0.45em; }
 .nav-toggle[aria-expanded="true"] .bars::after { transform: translateX(-50%) translateY(-6px) rotate(-45deg); }
 
 /* --------------------------------------------------- hero */
-.hero { padding-top: 0; }
+/* The hero pins while the rest of the page rides up over it. This is plain
+   sticky positioning rather than an animation, so the overlap itself works in
+   every browser — only the dimming behind the sheet needs scroll-driven
+   animation support. */
+.hero { padding-top: 0; position: sticky; top: 0; z-index: 0; }
+
+.after-hero {
+  position: relative;
+  z-index: 1;
+  background: var(--cream);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  box-shadow: 0 -16px 44px rgba(59, 34, 23, 0.14);
+}
 
 /* The media box is a single-cell grid: the picture and the caption share the
    cell, so the box can never be shorter than the words inside it. */
@@ -810,6 +823,34 @@ li { margin-bottom: 0.45em; }
 .gallery .tall { grid-row: span 2; }
 .gallery .tall img { aspect-ratio: 1 / 2.07; }
 
+/* --------------------------------------------------- embedded map */
+.map-embed {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--cream-2);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(59, 34, 23, 0.08);
+}
+
+/* opaque, so the frame reads as a loading panel rather than a broken box
+   while the tiles arrive. If it never loads, the two buttons beside it
+   still take the parent straight to Google Maps. */
+.map-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: var(--cream-2);
+}
+
+@media (max-width: 900px) {
+  .map-embed { aspect-ratio: 3 / 2; }
+}
+
 /* --------------------------------------------------- CTA band */
 .cta {
   background: var(--sand);
@@ -1044,7 +1085,7 @@ li { margin-bottom: 0.45em; }
 .js .reveal {
   opacity: 0;
   translate: 0 26px;
-  transition: opacity 0.7s var(--ease), translate 0.7s var(--ease);
+  transition: opacity 0.7s var(--ease), translate 0.7s var(--ease-pop);
 }
 .js .reveal.is-in { opacity: 1; translate: none; }
 
@@ -1052,6 +1093,127 @@ li { margin-bottom: 0.45em; }
 .js .reveal-d2 { transition-delay: 0.16s; }
 .js .reveal-d3 { transition-delay: 0.24s; }
 .js .reveal-d4 { transition-delay: 0.32s; }
+
+/* --------------------------------------------------- scroll-linked motion
+   All of this is handed to the browser's own scroll-driven animations, so
+   there is no scroll listener behind any of it and the work stays off the
+   main thread. Only opacity, scale and translate are touched — nothing here
+   triggers layout or a repaint.
+
+   The @supports guard is load-bearing, not politeness. A browser that does
+   not know `animation-timeline` drops that one declaration but still honours
+   the rest, so it would run the keyframes on the document timeline with no
+   duration and leave the hero parked at its faded end state. Guarded, those
+   browsers simply get a still hero, which is what the site looked like
+   before. */
+@media (prefers-reduced-motion: no-preference) {
+
+  /* the hero wording arrives on load, a beat apart */
+  @keyframes hero-in {
+    from { opacity: 0; translate: 0 16px; }
+    to   { opacity: 1; translate: none; }
+  }
+  .hero-overlay > * { animation: hero-in 0.6s var(--ease) both; }
+  .hero-overlay > *:nth-child(1) { animation-delay: 0.06s; }
+  .hero-overlay > *:nth-child(2) { animation-delay: 0.15s; }
+  .hero-overlay > *:nth-child(3) { animation-delay: 0.24s; }
+  .hero-overlay > *:nth-child(4) { animation-delay: 0.33s; }
+
+  @supports (animation-timeline: view()) {
+
+    /* ---- the home hero falls away as the page scrolls past it.
+       Three layers on one shared timeline at three speeds: the words leave
+       first and travel furthest, the card behind them dims and settles back,
+       and the picture pushes in slowly underneath. Together that reads as
+       depth; any one of them on its own is just a fade.
+
+       The timeline comes from .after-hero rather than from the hero itself:
+       the hero is pinned, and a pinned element never moves, so its own view
+       timeline would sit at progress 0 for the entire page. Measuring the
+       sheet climbing over it gives the motion something that actually
+       travels, and it finishes exactly as the hero vanishes behind it. */
+    main { timeline-scope: --cover; }
+    .after-hero { view-timeline-name: --cover; }
+
+    .hero-media,
+    .hero-overlay,
+    .hero-media > img {
+      animation-timeline: --cover;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+    }
+
+    .hero-overlay {
+      animation-name: hero-words-away;
+      animation-range: entry 15% entry 72%;
+    }
+
+    .hero-media {
+      animation-name: hero-card-away;
+      animation-range: entry 15% entry 100%;
+    }
+
+    .hero-media > img {
+      animation-name: hero-push-in;
+      animation-range: entry 0% entry 100%;
+    }
+
+    /* no `from` block anywhere below, so each animation starts from whatever
+       the element already computes to and the fill leaves it untouched until
+       the hero actually begins to leave */
+    @keyframes hero-words-away { to { opacity: 0; translate: 0 -3.25rem; } }
+    @keyframes hero-card-away  { to { opacity: 0.2; scale: 0.96; } }
+    @keyframes hero-push-in    { to { scale: 1.06; } }
+
+    /* ---- the inner pages' text hero gets the same courtesy, in one layer */
+    .page-hero {
+      animation: hero-words-away linear both;
+      animation-timeline: view();
+      animation-range: exit 8% exit 72%;
+    }
+
+    /* ---- editorial pictures settle into their box as they come up.
+       `scale` only: the reveal above animates `translate` and the tilt cards
+       animate `rotate`, so the three compose instead of cancelling each
+       other out. Growing up to 1 rather than down from above it also keeps
+       the picture inside its own box — overshooting would push the rounded
+       corners and the shadow across the neighbouring column. */
+    .split-media img {
+      animation: media-settle linear both;
+      animation-timeline: view();
+      animation-range: entry 18% entry 96%;
+    }
+    @keyframes media-settle { from { scale: 0.955; } to { scale: 1; } }
+  }
+
+  /* ---- a pre-school should feel springy, so nothing lands quite flat and
+     the decorations never sit completely still. Transform-only throughout,
+     and all of it inside the reduced-motion guard above. */
+
+  /* the class chips spring to size one after another. Their fade is already
+     handled by hero-in on the parent, so these only do the bounce. */
+  @keyframes chip-pop { from { scale: 0.4; rotate: -10deg; } to { scale: 1; rotate: 0deg; } }
+  .hero-badges .chip { animation: chip-pop 0.5s var(--ease-pop) both; }
+  .hero-badges .chip:nth-child(1) { animation-delay: 0.20s; }
+  .hero-badges .chip:nth-child(2) { animation-delay: 0.29s; }
+  .hero-badges .chip:nth-child(3) { animation-delay: 0.38s; }
+  .hero-badges .chip:nth-child(4) { animation-delay: 0.47s; }
+
+  /* the hand-drawn doodles drift, so the page is never completely still.
+     Two or three small SVGs per page, transform-only, so this stays on the
+     compositor — but it is the one thing here that never stops, which is
+     why it is the first thing to drop if the page ever feels busy. */
+  @keyframes doodle-bob { 50% { translate: 0 -9px; rotate: 3deg; } }
+  .doodle { animation: doodle-bob 7s ease-in-out infinite; }
+  .doodle-bulb { animation-duration: 8.4s; animation-delay: -2.6s; }
+  .doodle-star { animation-duration: 6.2s; animation-delay: -1.3s; }
+
+  /* a shake when you point at an icon, and a squash when you press a button */
+  @keyframes wiggle { 25% { rotate: -9deg; } 75% { rotate: 9deg; } }
+  .feature:hover .feature-icon,
+  .brand:hover .brand-mark { animation: wiggle 0.55s ease-in-out; }
+  .btn:active { scale: 0.96; }
+}
 
 /* --------------------------------------------------- responsive */
 @media (max-width: 1040px) {
@@ -1115,6 +1277,14 @@ li { margin-bottom: 0.45em; }
   .btn { width: 100%; justify-content: center; }
   .btn-row .btn { width: auto; flex: 1 1 auto; }
   .ticker { font-size: 0.82rem; }
+
+  /* The doodles hang outside their box by design. At phone widths that, plus
+     the bob rotating them a little further, pushed a few pixels past the
+     screen edge — clipped rather than scrollable, but still a nicked
+     decoration. Pull them in instead of widening the clip. */
+  .doodle-ring { width: 112px; right: -14px; bottom: -22px; }
+  .doodle-bulb { width: 74px; left: -14px; top: -20px; }
+  .doodle-star { width: 56px; right: -10px; top: -18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
