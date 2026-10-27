@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600"
+     preserveAspectRatio="xMidYMid slice" role="img" aria-label="Children playing outdoors with a ball under the sun">
+  <title>Outdoor play</title>
+  <rect width="800" height="600" fill="#fde6d6"/>
+  <circle cx="400" cy="276" r="198" fill="#fad6bd"/>
+  <path d="M0 466c160-32 250 22 400 0s250-30 400 2v132H0Z" fill="#e8a17c"/>
+
+  <!-- sun -->
+  <g stroke="#f6b73c" stroke-width="7" stroke-linecap="round">
+    <path d="M668 60v-20M668 184v20M606 122h-20M750 122h20M624 78l-14-14M712 166l14 14M712 78l14-14M624 166l-14 14"/>
+  </g>
+  <circle cx="668" cy="122" r="44" fill="#ffd166"/>
+
+  <!-- tree -->
+  <g>
+    <rect x="124" y="328" width="22" height="146" rx="11" fill="#9a7250"/>
+    <circle cx="135" cy="294" r="70" fill="#79b79a"/>
+    <circle cx="88" cy="326" r="44" fill="#8fc2ac"/>
+    <circle cx="184" cy="324" r="40" fill="#8fc2ac"/>
+  </g>
+
+  <!-- child running -->
+  <g>
+    <path d="M352 404l-24 60M398 404l26 58" stroke="#8a5a3b" stroke-width="25" stroke-linecap="round"/>
+    <path d="M312 470h32M408 468h32" stroke="#3b2217" stroke-width="18" stroke-linecap="round"/>
+    <rect x="344" y="288" width="86" height="124" rx="31" fill="#c3b2e6"/>
+    <path d="M350 318l-50-16M424 318l46-30" stroke="#c98a5e" stroke-width="21" stroke-linecap="round"/>
+    <circle cx="387" cy="230" r="46" fill="#d79a6d"/>
+    <path d="M341 226c0-30 20-48 46-48s46 18 46 48c-9-19-24-25-46-25s-37 6-46 25Z" fill="#3b2217"/>
+    <circle cx="372" cy="234" r="5" fill="#3b2217"/>
+    <circle cx="403" cy="234" r="5" fill="#3b2217"/>
+    <path d="M373 253c8 10 22 10 30 0" stroke="#3b2217" stroke-width="4.6" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- ball -->
+  <g>
+    <circle cx="556" cy="430" r="44" fill="#fff8ec" stroke="#24386f" stroke-width="7"/>
+    <path d="M512 430h88M556 386v88" stroke="#24386f" stroke-width="6"/>
+  </g>
+
+  <!-- grass -->
+  <g stroke="#cf855c" stroke-width="7" stroke-linecap="round" fill="none" opacity="0.7">
+    <path d="M648 528c0-18 10-26 10-26M672 532c0-22 12-30 12-30"/>
+  </g>
+</svg>

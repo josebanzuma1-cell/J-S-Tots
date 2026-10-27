@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="J and S Tots Pre-School badge">
+  <title>J &amp; S Tots Pre-School</title>
+  <!-- shield -->
+  <path d="M10 15h44v19.5C54 45 44.8 52.5 32 56.5 19.2 52.5 10 45 10 34.5Z"
+        fill="#ffffff" stroke="#d3262c" stroke-width="3.6" stroke-linejoin="round"/>
+  <!-- graduation cap -->
+  <path d="M32 9 49 16 32 23 15 16Z" fill="#24386f"/>
+  <path d="M24 19.5V27c0 2.8 3.6 4.4 8 4.4s8-1.6 8-4.4v-7.5"
+        fill="none" stroke="#24386f" stroke-width="3" stroke-linecap="round"/>
+  <path d="M49 16v9" fill="none" stroke="#24386f" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="49" cy="27.2" r="2.3" fill="#d3262c"/>
+  <!-- necktie -->
+  <path d="M28 34h8l-1.6 4.5h-4.8Z" fill="#24386f"/>
+  <path d="M29.6 38.5h4.8L36.6 47 32 51l-4.6-4Z" fill="#24386f"/>
+</svg>

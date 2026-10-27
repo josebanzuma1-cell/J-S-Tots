@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600"
+     preserveAspectRatio="xMidYMid slice" role="img" aria-label="A teacher holding the hand of a small child">
+  <title>Warm, watchful care</title>
+  <rect width="800" height="600" fill="#ddeee6"/>
+  <circle cx="400" cy="280" r="198" fill="#c9e3d7"/>
+  <path d="M0 470c170-34 250 18 400-4s240-26 400 6v128H0Z" fill="#8fc2ac"/>
+
+  <!-- teacher -->
+  <g>
+    <path d="M300 420v60M348 420v60" stroke="#6b4530" stroke-width="28" stroke-linecap="round"/>
+    <path d="M280 486h34M334 486h34" stroke="#3b2217" stroke-width="20" stroke-linecap="round"/>
+    <path d="M276 274h96c14 0 24 12 22 26l-16 128H270l-16-128c-2-14 8-26 22-26Z" fill="#24386f"/>
+    <path d="M282 306l-30 68M366 306l44 54" stroke="#b87a52" stroke-width="22" stroke-linecap="round"/>
+    <circle cx="324" cy="212" r="50" fill="#b87a52"/>
+    <path d="M274 212c0-34 22-54 50-54s50 20 50 54c0-10-4-18-10-22-8 6-22 8-40 6-22-2-38 2-50 16Z" fill="#2c1a10"/>
+    <circle cx="308" cy="218" r="5.4" fill="#3b2217"/>
+    <circle cx="342" cy="218" r="5.4" fill="#3b2217"/>
+    <path d="M310 240c8 10 22 10 30 0" stroke="#3b2217" stroke-width="5" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- small child -->
+  <g>
+    <path d="M498 444v38M532 444v38" stroke="#8a5a3b" stroke-width="22" stroke-linecap="round"/>
+    <path d="M482 488h28M520 488h28" stroke="#3b2217" stroke-width="16" stroke-linecap="round"/>
+    <rect x="482" y="358" width="68" height="98" rx="26" fill="#e8a17c"/>
+    <path d="M488 384l-78-24M546 384l28 34" stroke="#d79a6d" stroke-width="18" stroke-linecap="round"/>
+    <circle cx="516" cy="312" r="38" fill="#d79a6d"/>
+    <path d="M478 308c0-24 17-40 38-40s38 16 38 40c-8-16-20-21-38-21s-30 5-38 21Z" fill="#4a2c17"/>
+    <circle cx="504" cy="318" r="4.4" fill="#3b2217"/>
+    <circle cx="529" cy="318" r="4.4" fill="#3b2217"/>
+    <path d="M505 334c6 8 17 8 23 0" stroke="#3b2217" stroke-width="4.2" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- joined hands -->
+  <circle cx="408" cy="362" r="17" fill="#b87a52"/>
+
+  <!-- hearts -->
+  <g fill="#e8a17c" opacity="0.75">
+    <path d="M652 186c0-14 20-18 24-4 4-14 24-10 24 4 0 16-24 30-24 30s-24-14-24-30Z"/>
+    <path d="M128 240c0-10 14-13 17-3 3-10 17-7 17 3 0 11-17 21-17 21s-17-10-17-21Z"/>
+  </g>
+</svg>

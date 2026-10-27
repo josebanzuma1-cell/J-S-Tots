@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600"
+     preserveAspectRatio="xMidYMid slice" role="img" aria-label="A child stacking coloured building blocks">
+  <title>Building blocks and shapes</title>
+  <rect width="800" height="600" fill="#fbe2d2"/>
+  <circle cx="400" cy="286" r="196" fill="#f6d2bb"/>
+  <path d="M0 470c150-34 250 18 400-4s250-30 400 2v132H0Z" fill="#e8a17c"/>
+
+  <!-- block tower -->
+  <g>
+    <rect x="534" y="392" width="92" height="80" rx="14" fill="#f0c96a"/>
+    <rect x="546" y="316" width="68" height="76" rx="13" fill="#8fc2ac"/>
+    <rect x="556" y="252" width="48" height="64" rx="11" fill="#d3262c"/>
+    <path d="M568 272h24M580 262v24" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <rect x="640" y="420" width="62" height="52" rx="12" fill="#c3b2e6"/>
+  <circle cx="148" cy="438" r="40" fill="#24386f"/>
+  <path d="M108 438h80M148 398v80" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- child -->
+  <g>
+    <path d="M330 406v62M378 406v62" stroke="#8a5a3b" stroke-width="26" stroke-linecap="round"/>
+    <path d="M312 474h32M364 474h32" stroke="#3b2217" stroke-width="19" stroke-linecap="round"/>
+    <rect x="310" y="294" width="88" height="124" rx="32" fill="#aec7ec"/>
+    <path d="M318 326l-32 44M392 326l56-12" stroke="#c98a5e" stroke-width="21" stroke-linecap="round"/>
+    <circle cx="354" cy="236" r="46" fill="#d79a6d"/>
+    <path d="M308 230c0-30 20-48 46-48s46 18 46 48c-9-19-24-25-46-25s-37 6-46 25Z" fill="#3b2217"/>
+    <circle cx="339" cy="240" r="5" fill="#3b2217"/>
+    <circle cx="370" cy="240" r="5" fill="#3b2217"/>
+    <path d="M341 259c7 9 19 9 26 0" stroke="#3b2217" stroke-width="4.6" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <g stroke="#fff" stroke-width="6" stroke-linecap="round" opacity="0.7" fill="none">
+    <path d="M196 196l0 26M183 209h26"/>
+    <path d="M664 164l0 22M653 175h22"/>
+  </g>
+</svg>

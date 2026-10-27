@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600"
+     preserveAspectRatio="xMidYMid slice" role="img" aria-label="A child painting at an easel">
+  <title>Painting and making</title>
+  <rect width="800" height="600" fill="#dde8f8"/>
+  <circle cx="400" cy="282" r="196" fill="#cddcf2"/>
+  <path d="M0 470c170-32 250 20 400-2s240-28 400 6v126H0Z" fill="#aec7ec"/>
+
+  <!-- easel -->
+  <g>
+    <path d="M498 258v232M650 258v232M470 490h40M640 490h40" stroke="#9a7250" stroke-width="13" stroke-linecap="round"/>
+    <rect x="466" y="194" width="216" height="184" rx="12" fill="#fff8ec" stroke="#9a7250" stroke-width="10"/>
+    <circle cx="536" cy="262" r="30" fill="#f0c96a"/>
+    <path d="M488 344c34-54 66-54 98-14 26 32 54 36 82 12v36H488Z" fill="#8fc2ac"/>
+    <path d="M598 240l22-26 22 26-22 26Z" fill="#e8a17c"/>
+    <rect x="466" y="378" width="216" height="16" rx="8" fill="#9a7250"/>
+  </g>
+
+  <!-- child -->
+  <g>
+    <path d="M214 400v70M262 400v70" stroke="#8a5a3b" stroke-width="26" stroke-linecap="round"/>
+    <path d="M196 476h32M248 476h32" stroke="#3b2217" stroke-width="19" stroke-linecap="round"/>
+    <rect x="194" y="286" width="88" height="126" rx="32" fill="#d3262c"/>
+    <path d="M202 318l-30 48M276 316l88-24" stroke="#d79a6d" stroke-width="21" stroke-linecap="round"/>
+    <!-- brush -->
+    <g transform="rotate(-18 372 292)">
+      <rect x="356" y="283" width="76" height="12" rx="6" fill="#f2a71b"/>
+      <rect x="428" y="279" width="22" height="20" rx="6" fill="#24386f"/>
+    </g>
+    <circle cx="238" cy="228" r="46" fill="#e0a97b"/>
+    <path d="M192 224c0-30 20-48 46-48s46 18 46 48c-9-19-24-25-46-25s-37 6-46 25Z" fill="#5a3a28"/>
+    <circle cx="223" cy="232" r="5" fill="#3b2217"/>
+    <circle cx="254" cy="232" r="5" fill="#3b2217"/>
+    <path d="M225 251c7 9 19 9 26 0" stroke="#3b2217" stroke-width="4.6" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- paint pots -->
+  <g>
+    <rect x="96" y="430" width="44" height="46" rx="10" fill="#8fc2ac"/>
+    <rect x="146" y="442" width="38" height="34" rx="9" fill="#f0c96a"/>
+  </g>
+</svg>

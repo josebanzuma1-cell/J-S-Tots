@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600"
+     preserveAspectRatio="xMidYMid slice" role="img" aria-label="A child playing a drum with music notes around">
+  <title>Music and movement</title>
+  <rect width="800" height="600" fill="#fbeecd"/>
+  <circle cx="400" cy="282" r="196" fill="#f7e3bc"/>
+  <path d="M0 472c160-34 250 20 400-2s250-28 400 4v126H0Z" fill="#f0c96a"/>
+
+  <!-- notes -->
+  <g fill="#9a7314" opacity="0.6">
+    <g transform="translate(132 150)"><circle cx="0" cy="44" r="16"/><rect x="12" y="-4" width="7" height="48" rx="3.5"/><path d="M19 -4c18 4 24 12 24 24-6-10-14-14-24-14Z"/></g>
+    <g transform="translate(648 128) scale(0.86)"><circle cx="0" cy="44" r="16"/><rect x="12" y="-4" width="7" height="48" rx="3.5"/><path d="M19 -4c18 4 24 12 24 24-6-10-14-14-24-14Z"/></g>
+    <g transform="translate(700 262) scale(0.66)"><circle cx="0" cy="44" r="16"/><rect x="12" y="-4" width="7" height="48" rx="3.5"/><path d="M19 -4c18 4 24 12 24 24-6-10-14-14-24-14Z"/></g>
+  </g>
+
+  <!-- child -->
+  <g>
+    <path d="M356 408v62M404 408v62" stroke="#8a5a3b" stroke-width="26" stroke-linecap="round"/>
+    <path d="M338 476h32M390 476h32" stroke="#3b2217" stroke-width="19" stroke-linecap="round"/>
+    <rect x="336" y="290" width="88" height="126" rx="32" fill="#8fc2ac"/>
+    <path d="M344 322l-46 26M416 322l48 22" stroke="#c98a5e" stroke-width="21" stroke-linecap="round"/>
+    <circle cx="380" cy="232" r="46" fill="#c98a5e"/>
+    <path d="M334 228c0-30 20-48 46-48s46 18 46 48c-9-19-24-25-46-25s-37 6-46 25Z" fill="#3b2217"/>
+    <circle cx="365" cy="236" r="5" fill="#3b2217"/>
+    <circle cx="396" cy="236" r="5" fill="#3b2217"/>
+    <path d="M365 255c8 10 22 10 30 0" stroke="#3b2217" stroke-width="4.6" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- drum -->
+  <g>
+    <rect x="304" y="398" width="152" height="74" rx="18" fill="#d3262c"/>
+    <ellipse cx="380" cy="398" rx="76" ry="20" fill="#fff8ec" stroke="#b81f25" stroke-width="6"/>
+    <path d="M312 414l136 0" stroke="#f2a71b" stroke-width="9" stroke-linecap="round"/>
+    <path d="M312 452l136 0" stroke="#f2a71b" stroke-width="9" stroke-linecap="round"/>
+  </g>
+
+  <!-- sticks -->
+  <g stroke="#9a7250" stroke-width="11" stroke-linecap="round">
+    <path d="M294 344l-8 30"/>
+    <path d="M470 338l10 32"/>
+  </g>
+</svg>
