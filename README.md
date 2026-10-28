@@ -215,6 +215,13 @@ past 1 is what makes it read as a stroke peeking out at the edges. Each child ge
 different brand pair — red/gold, navy/sky, green/butter, lavender/peach, and gold/red
 for the pupil.
 
+**The stroke is held back until its mask image has decoded.** Until then there is
+nothing to cut the shape with, so `::before` paints its whole box and you get a
+coloured rectangle behind each child — which looks exactly like the cut-out failing.
+`main.js` adds `is-ready` once the photographs are decoded (same files, so the mask
+is in cache by then), with a 3s backstop. Without scripting the stroke is simply
+visible from the start, the same `.js` pattern the scroll reveals use.
+
 It grows about its own **centre**, which matters more than it sounds. Anchored at
 `bottom center` a 400px-tall silhouette was pushed about 58px upward at scale 1.1,
 and it read as a ghost standing behind the child rather than an outline around them.

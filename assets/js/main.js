@@ -51,6 +51,25 @@
     window.addEventListener('scroll', setStuck, { passive: true });
   }
 
+  /* ---------------------------------------------- cut-out strokes
+     The coloured stroke behind each photograph is a pseudo-element masked by
+     that same photograph. Until the mask image has decoded there is nothing
+     to cut the shape with, so it paints as a plain rectangle — which is what
+     made the cut-outs look like they had failed. Reveal it only once the
+     pictures are decoded; they are the same files, so the mask is in cache
+     by then. The timeout is a backstop: a stroke that never appears is worse
+     than one that appears unmasked for a moment. */
+  document.querySelectorAll(".hero-cast, .cta").forEach(function (group) {
+    var pics = group.querySelectorAll(".cast-slot img");
+    if (!pics.length) return;
+    var ready = function () { group.classList.add("is-ready"); };
+    var jobs = Array.prototype.map.call(pics, function (img) {
+      return img.decode ? img.decode().catch(function () {}) : Promise.resolve();
+    });
+    Promise.all(jobs).then(ready);
+    setTimeout(ready, 3000);
+  });
+
   /* ---------------------------------------------- scroll reveal */
   var revealables = document.querySelectorAll('.reveal');
 
