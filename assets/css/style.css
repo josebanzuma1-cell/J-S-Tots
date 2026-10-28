@@ -381,7 +381,14 @@ li { margin-bottom: 0.45em; }
   min-width: 0;
   width: 100%;
   height: 100%;
-  min-height: clamp(470px, 76vh, 720px);
+  /* The hero has to very nearly fill the screen, and not only for looks: the
+     fade is driven by the sheet entering the viewport, so a short hero means
+     the sheet is already on screen at scroll 0 and the hero loads part-faded.
+     Below roughly 85% of the viewport height that becomes visible; the old
+     720px cap put a 1920x1200 screen at 74%, which rendered the headline at
+     0.81 opacity before anyone had touched the page. */
+  min-height: 92vh; /* fallback for browsers without lvh */
+  min-height: max(470px, 92lvh);
   object-fit: cover;
   object-position: center 56%;
 }
@@ -1394,7 +1401,9 @@ li { margin-bottom: 0.45em; }
   .grid-3, .grid-2, .tilt-grid, .field-row { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
   .hero-media { border-radius: var(--r-lg); }
-  .hero-media > img { min-height: 430px; object-position: center 62%; }
+  /* no min-height override here: the base rule now sizes the hero against the
+     viewport at every width, which is what keeps the fade from pre-applying */
+  .hero-media > img { object-position: center 62%; }
   .tilt { rotate: none !important; }
   .value-item { grid-template-columns: 1fr; gap: 0.2rem; }
   .value-num { padding-top: 0; }

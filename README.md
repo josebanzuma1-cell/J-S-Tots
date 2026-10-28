@@ -123,6 +123,21 @@ travels, and it finishes exactly as the hero disappears. That needs
 `timeline-scope: --cover` on `main`, because the hero is a *preceding* sibling of the
 element declaring the timeline.
 
+**The hero must stay nearly as tall as the viewport, and that is load-bearing rather
+than styling.** The fade is driven by the sheet *entering* the viewport, so a short
+hero means the sheet is already on screen at scroll 0 and the hero renders part-faded
+before anyone has touched the page. Below roughly 85% of the viewport height it
+shows. An earlier `min-height: clamp(470px, 76vh, 720px)` put a 1920x1200 screen at
+74% and rendered the headline at 0.81 opacity on load; a 375x812 phone sat at 67%.
+It is now `max(470px, 92lvh)`, which holds the ratio at 0.92 from that phone up to a
+1600x1440 monitor. **If you change that min-height, check the headline is still fully
+opaque at scroll 0 on a tall screen.**
+
+The hero itself carries only three things: the programme chips, the headline and the
+news ticker. A lede paragraph used to sit between the headline and the ticker, but it
+repeated the chips (the programmes) and the ticker (hours, place, phone), so it came
+out. The page description meta tag still carries that wording for search engines.
+
 ### Playful touches
 
 It is a pre-school, so nothing lands quite flat. `--ease-pop` overshoots a little and
