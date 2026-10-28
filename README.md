@@ -193,12 +193,33 @@ re-encoded to WebP. **The hero payload went from 931KB to 338KB**, and the pupil
 The dev server grew a temporary, allowlisted endpoint to receive those files and it
 was removed again straight afterwards; `server.js` has no write route.
 
-### The rim, and the pupil
+### The floating stroke
 
-Every cut-out carries the same sticker edge: four `drop-shadow()` filters build a
-white rim, four more put the brand colours just outside it, and the last lifts it off
-the page. Each applies to the *result* of the previous one, which is what makes
-concentric rings rather than one flat halo. It is static, so it rasterises once.
+Each cut-out has a **two-colour copy of its own silhouette drifting behind it**,
+rather than a fixed ring around it. The photograph is used as the CSS mask, so the
+shape follows the child instead of being a disc parked behind them, and scaling it
+past 1 is what makes it read as a stroke peeking out at the edges. Each child gets a
+different brand pair — red/gold, navy/sky, green/butter, lavender/peach, and gold/red
+for the pupil.
+
+It levitates on `translate`, `rotate` and `scale` only. An earlier version animated
+`border-radius` to morph a blob shape, which looks the same but is a paint property:
+five shapes morphing would repaint every frame. Rotating and unevenly scaling an
+asymmetric silhouette gives the same impression on the compositor.
+
+The stroke needs something to hang on, and an `<img>` is a replaced element that will
+not render `::before` — hence `.cast-slot`, which also took over the width from the
+images. One `--cast-scale` variable on `.hero-cast` shrinks the whole row on a short
+window instead of four separate rules.
+
+With the colour moved to the stroke, the rim on the cut-out itself is down to a white
+sticker edge and a lift — five filter passes instead of nine.
+
+**One cost to know about.** Each photograph is now fetched twice: once as the `<img>`
+and once as the CSS mask. On the live site the second should come from the HTTP cache
+(`max-age=600`); the local dev server sends `no-store`, so it genuinely refetches
+there. It is still decoded twice either way, which costs memory on a low-end phone.
+If that ever matters, the stroke is the thing to drop.
 
 `pupil.webp` used to straddle the hero seam. The cast now stands along that floor, so
 she moved to the CTA panel, which has space beside its centred wording and crops her

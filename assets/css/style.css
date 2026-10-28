@@ -364,15 +364,15 @@ li { margin-bottom: 0.45em; }
    She used to straddle the hero seam. The cast now stands along that floor,
    so she moved to the CTA panel, whose own overflow:hidden crops her cleanly
    against the panel edge. */
-.pupil {
+.slot-pupil {
   position: absolute;
   right: clamp(0.5rem, 2vw, 2.5rem);
   bottom: 0;
   width: clamp(170px, 19vw, 275px);
-  height: auto;
   pointer-events: none;
   transform-origin: bottom center;
 }
+.pupil { display: block; width: 100%; height: auto; }
 
 /* --------------------------------------------------- the photo rim
    Every cut-out carries the same sticker edge: four drop-shadows build a white
@@ -381,13 +381,14 @@ li { margin-bottom: 0.45em; }
    concentric rings rather than one flat halo. Static, so it rasterises once. */
 .pupil,
 .cast {
+  /* just the white sticker edge and a lift now — the brand colours moved to
+     the floating stroke behind, which halves the filter passes as well */
   filter:
     drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff)
     drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff)
-    drop-shadow(5px 0 0 var(--red)) drop-shadow(-5px 0 0 var(--navy))
-    drop-shadow(0 5px 0 var(--green)) drop-shadow(0 -5px 0 var(--gold))
-    drop-shadow(0 18px 22px rgba(59, 34, 23, 0.3));
+    drop-shadow(0 14px 18px rgba(59, 34, 23, 0.3));
 }
+
 
 
 /* The hero is a stage: badge, news pill and headline in the upper half, and
@@ -434,6 +435,10 @@ li { margin-bottom: 0.45em; }
   filter: drop-shadow(0 6px 14px rgba(90, 34, 8, 0.32));
 }
 
+/* the pill inherits align-self: flex-start from the old left-aligned hero;
+   this stage is centred, so it has to be told */
+.hero-overlay .ticker { align-self: center; }
+
 .hero-overlay h1 {
   color: #fff;
   margin: 0;
@@ -457,27 +462,70 @@ li { margin-bottom: 0.45em; }
   pointer-events: none;
 }
 
+/* The slot is the flex item and carries the width; the photograph just fills
+   it. The slot exists so there is something to hang the floating stroke on —
+   an <img> is a replaced element and will not render ::before. */
+.cast-slot {
+  position: relative;
+  z-index: 0;
+  display: block;
+  /* min-width:0 lets them shrink together rather than overflow the row on a
+     narrow screen; heights follow the aspect ratio, so they shorten with it */
+  min-width: 0;
+}
+
 .cast {
   display: block;
+  width: 100%;
   height: auto;
-  /* min-width:0 lets them shrink together rather than overflow the row on a
-     narrow screen; height follows the aspect ratio, so they shorten with it */
-  min-width: 0;
-  max-height: 62vh;
-  max-height: 62lvh;
-  object-fit: contain;
-  object-position: bottom center;
 }
+
+/* --------------------------------------------------- the floating stroke
+   A two-colour copy of the child's own silhouette, drifting behind them. The
+   photograph is used as the mask, so the shape follows the cut-out instead of
+   being a disc behind it, and scaling it past 1 makes it read as a stroke
+   peeking out around the edges. Only transform properties animate, so it is
+   all compositor work and nothing repaints.
+
+   z-index -1 inside the slot's own stacking context keeps it behind the
+   photograph and still in front of the hero background. */
+.cast-slot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(142deg, var(--b1) 0%, var(--b2) 100%);
+  -webkit-mask-image: var(--img);
+          mask-image: var(--img);
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-position: bottom center;
+          mask-position: bottom center;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  transform-origin: bottom center;
+  /* past 1 is what makes it a stroke rather than a silhouette hidden behind
+     the child; big enough that both gradient stops are actually visible */
+  scale: 1.1;
+  opacity: 0.95;
+}
+
+/* two brand colours each, and the photograph that cuts the shape */
+.slot-desk  { --b1: var(--red);   --b2: var(--gold);   --img: url("../img/kid-desk.webp"); }
+.slot-jump  { --b1: var(--navy);  --b2: var(--sky);    --img: url("../img/kid-jump.webp"); }
+.slot-grad  { --b1: var(--green); --b2: var(--butter); --img: url("../img/kid-grad.webp"); }
+.slot-hand  { --b1: var(--lav);   --b2: var(--peach);  --img: url("../img/kid-hand.webp"); }
+.slot-pupil { --b1: var(--gold);  --b2: var(--red);    --img: url("../img/pupil.webp"); }
 
 /* Sized per crop: the desk shot is landscape and sits low, the graduate is
    the tallest and anchors the middle. Her width sets how far the cast rises
    into the headline, because she is the tallest: at 22vw the overlap reached
    66px and her cap swallowed the last word of the line, so she is trimmed to
    land around 40px, which clips the type without hiding any of it. */
-.cast-desk { width: clamp(170px, 30vw, 460px); }
-.cast-jump { width: clamp(110px, 19vw, 290px); }
-.cast-grad { width: clamp(130px, 21vw, 306px); }
-.cast-hand { width: clamp(105px, 18vw, 270px); }
+.slot-desk { width: calc(clamp(170px, 30vw, 460px) * var(--cast-scale, 1)); }
+.slot-jump { width: calc(clamp(110px, 19vw, 290px) * var(--cast-scale, 1)); }
+.slot-grad { width: calc(clamp(130px, 21vw, 306px) * var(--cast-scale, 1)); }
+.slot-hand { width: calc(clamp(105px, 18vw, 270px) * var(--cast-scale, 1)); }
 
 .hero-badges {
   display: flex;
@@ -1290,6 +1338,21 @@ li { margin-bottom: 0.45em; }
   .hero-overlay > *:nth-child(3) { animation-delay: 0.24s; }
   .hero-overlay > *:nth-child(4) { animation-delay: 0.33s; }
 
+  /* The stroke behind each child levitates. Rotating and unevenly scaling an
+     asymmetric blob reads as morphing, which is why the border-radius itself
+     never animates — that is a paint property and would cost a full repaint
+     every frame on five shapes at once. These are transform-only. */
+  @keyframes blob-float {
+    0%, 100% { translate: 0 0;     rotate: 0deg;    scale: 1.1; }
+    33%      { translate: -2% -4%; rotate: -3deg;   scale: 1.15; }
+    66%      { translate: 2% -2%;  rotate: 2.5deg;  scale: 1.06; }
+  }
+  .cast-slot::before  { animation: blob-float 9s ease-in-out infinite; }
+  .slot-jump::before  { animation-duration: 7.4s;  animation-delay: -2s; }
+  .slot-grad::before  { animation-duration: 10.5s; animation-delay: -4s; }
+  .slot-hand::before  { animation-duration: 8.2s;  animation-delay: -6s; }
+  .slot-pupil::before { animation-duration: 8.8s;  animation-delay: -3s; }
+
   @keyframes cast-idle {
     0%, 100% { translate: 0 0; rotate: 0deg; }
     50%      { translate: 0 -9px; rotate: 0.8deg; }
@@ -1515,12 +1578,12 @@ li { margin-bottom: 0.45em; }
      300px dead zone under the headline. The two most legible stay, at a size
      that reaches the type. flex-shrink is off so they keep that size and let
      the card edges crop them, which reads as a crowd rather than a squeeze. */
-  .cast-desk,
-  .cast-hand { display: none; }
-  .cast { flex-shrink: 0; }
-  .cast-jump { width: 58%; }
-  .cast-grad { width: 78%; }
-  .cast + .cast { margin-left: -12%; }
+  .slot-desk,
+  .slot-hand { display: none; }
+  .cast-slot { flex-shrink: 0; }
+  .slot-jump { width: 58%; }
+  .slot-grad { width: 78%; }
+  .cast-slot + .cast-slot { margin-left: -12%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1541,7 +1604,7 @@ li { margin-bottom: 0.45em; }
   /* the centred CTA wording fills the panel at this width, so the panel grows
      a foot for her to stand in rather than her standing on the buttons */
   .cta { padding-bottom: clamp(12.5rem, 36vw, 15rem); }
-  .pupil { width: clamp(125px, 30vw, 190px); right: clamp(0.5rem, 4vw, 2rem); }
+  .slot-pupil { width: clamp(125px, 30vw, 190px); right: clamp(0.5rem, 4vw, 2rem); }
 }
 
 /* --------------------------------------------------- short windows
@@ -1555,7 +1618,7 @@ li { margin-bottom: 0.45em; }
   }
   .hero-overlay h1 { font-size: clamp(1.5rem, 3.2vw, 2.4rem); }
   .hero-badge { width: clamp(38px, 3.8vw, 56px); }
-  .cast { max-height: 46vh; max-height: 46lvh; }
+  .hero-cast { --cast-scale: 0.74; }
 }
 
 /* --------------------------------------------------- print */
