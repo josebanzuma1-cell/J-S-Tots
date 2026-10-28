@@ -527,12 +527,12 @@ li { margin-bottom: 0.45em; }
                              calc(0.55 * min(100vw - 64px, 1440px))), 560px);
   display: flex;
   align-items: flex-end;
-  /* Spread, not clustered. They used to be centred with a viewport-width
-     negative margin, which on a short screen pulled 70px-wide children
-     together by 54px each — the row collapsed to 15% of the card. */
-  justify-content: space-around;
+  /* One child now, placed right of centre where the hero was marked up. The
+     end padding is what sets how far in she sits; flex-end plus a percentage
+     keeps that position steady as she grows and shrinks. */
+  justify-content: flex-end;
   gap: 0;
-  padding-inline: clamp(0.3rem, 1.6vw, 1.6rem);
+  padding-inline: clamp(0.3rem, 1.6vw, 1.6rem) 12%;
   pointer-events: none;
 }
 

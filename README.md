@@ -165,7 +165,13 @@ The news pill sits **above** the headline rather than below it, which is both th
 reference structure (pill, big type, subject) and the only way to keep it clear of
 the cast standing in front.
 
-**Two of the four are parked, not deleted.** `kid-desk` and `kid-hand` are commented
+**Three of the four are parked, not deleted.** `kid-desk`, `kid-jump` and `kid-hand`
+are commented out in `index.html`, so the browser never fetches them — uncomment to
+bring any back. The hero shows the graduate alone, placed right of centre by
+`justify-content: flex-end` plus a percentage end padding, which holds that position
+as she grows and shrinks.
+
+**Older note, two of four:** `kid-desk` and `kid-hand` are commented
 out in `index.html`, which also means the browser never fetches them — uncomment to
 bring them back. With two children the width budget stops being the binding
 constraint, so they grow until they nearly reach the wording instead.
