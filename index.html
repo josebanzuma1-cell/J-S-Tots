@@ -43,8 +43,8 @@
   <!-- ============================================= hero -->
   <section class="hero">
     <div class="hero-media">
+      <img src="assets/img/illus-hero.svg" alt="Children playing outside the J &amp; S Tots Pre-School building" width="1200" height="740">
       <div class="hero-overlay">
-        <img class="hero-badge" src="assets/img/logo.svg" alt="" width="104" height="104">
         <div class="hero-badges">
           <span class="chip chip-red">Playing Class</span>
           <span class="chip chip-navy">Nursery</span>
@@ -57,9 +57,6 @@
           <span class="ticker-text" data-messages='["Admissions are open for Playing Class through to P.1 — enrol today.","Classes run Monday to Friday, 8:00 am to 5:00 pm.","Find us opposite Munyonyo C.O.U. Church.","Call 0774 197 708 to arrange a visit."]'>Admissions are open for Playing Class through to P.1 — enrol today.</span>
         </div>
       </div>
-      <img class="hero-grad" src="assets/img/graduate.webp"
-           alt="A pre-school graduate in a cap and gown"
-           width="1086" height="1448" fetchpriority="high" decoding="async">
     </div>
   </section>
 
@@ -69,6 +66,14 @@
        straight through them. Deliberately not re-indented, to keep
        the diff readable. -->
   <div class="after-hero">
+  <!-- She stands at the seam, overlapping the fading hero above and the sheet
+       below. She belongs to .after-hero rather than to the hero for two
+       reasons: the sheet carries z-index 1, so anything inside it paints above
+       the pinned hero; and she then rides up with the sheet as you scroll
+       instead of staying behind with the hero. -->
+  <img class="pupil" src="assets/img/pupil.webp"
+       alt="A smiling child in a maroon polo shirt, arms folded"
+       width="1024" height="1536" loading="lazy" decoding="async">
   <!-- ============================================= why choose us, icon row -->
   <section class="section">
     <div class="wrap">
@@ -353,12 +358,6 @@
   <!-- ============================================= CTA -->
   <section class="section-tight">
     <div class="cta reveal">
-      <!-- She used to straddle the hero seam, but the graduate now fills that
-           corner and the two overlapped by 72%. The CTA panel is the one place
-           on the page with real empty space beside the wording. -->
-      <img class="pupil" src="assets/img/pupil.webp"
-           alt="A smiling child in a maroon polo shirt, arms folded"
-           width="1024" height="1536" loading="lazy" decoding="async">
       <p class="eyebrow eyebrow-dot" style="justify-content:center">Admissions open</p>
       <h2>Enrol now — Playing Class through to P.1.</h2>
       <p class="lede">Come and see the classrooms, meet the staff and ask us anything. We are <strong class="shout">opposite Munyonyo C.O.U. Church</strong>.</p>
