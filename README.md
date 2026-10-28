@@ -258,6 +258,36 @@ further down and its `padding` shorthand overrode it. Overrides for anything dec
 below the responsive section go in the **late overrides** block at the foot of the
 file.
 
+### Crayon highlights
+
+The marks behind the words that matter are a waxy crayon stroke, not a clean bar.
+The texture is an SVG `feTurbulence` filter displacing the shape's edges, so it costs
+no bandwidth, stays sharp at any size and roughens the way a crayon skips over paper.
+The filter lives at the foot of `index.html`; a page without it simply renders a
+clean bar, which is a fine fallback.
+
+Headings use `.hl` (a solid red bar behind white text). Inline accents use `.shout`,
+which gets a thinner gold underline instead, so body copy stays readable.
+
+They move twice: each mark draws itself on from the left, the way a crayon is
+dragged, then settles into a slow wobble so it never looks printed. The hero's mark
+runs on a delay after the headline arrives; the ones further down wait for their
+block to be revealed, keyed off the same `.is-in` class the scroll reveals use.
+
+### Two bugs the CTA panel taught me
+
+**`.slot-pupil` lost to `.cast-slot`.** Both are single-class selectors, and
+`.cast-slot { position: relative }` is declared further down the file, so the pupil's
+`position: absolute` never applied and she rendered in normal flow at the top of the
+panel. It is `.cta .slot-pupil` now. Worth remembering: every `.slot-*` rule competes
+with `.cast-slot` at equal specificity, so order decides.
+
+**A lazy image has no mask to cut with.** The strokes were revealed by a blind 3s
+timeout, but the pupil is `loading="lazy"` and far down the page, so the timer fired
+long before her picture existed — and an unmasked stroke paints as a plain coloured
+rectangle. Each slot now reveals its own stroke on its own image's `load` event. A
+picture that never arrives leaves its stroke hidden, which is the right outcome.
+
 ### Playful touches
 
 It is a pre-school, so nothing lands quite flat. `--ease-pop` overshoots a little and

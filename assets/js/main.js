@@ -52,22 +52,19 @@
   }
 
   /* ---------------------------------------------- cut-out strokes
-     The coloured stroke behind each photograph is a pseudo-element masked by
-     that same photograph. Until the mask image has decoded there is nothing
-     to cut the shape with, so it paints as a plain rectangle — which is what
-     made the cut-outs look like they had failed. Reveal it only once the
-     pictures are decoded; they are the same files, so the mask is in cache
-     by then. The timeout is a backstop: a stroke that never appears is worse
-     than one that appears unmasked for a moment. */
-  document.querySelectorAll(".hero-cast, .cta").forEach(function (group) {
-    var pics = group.querySelectorAll(".cast-slot img");
-    if (!pics.length) return;
-    var ready = function () { group.classList.add("is-ready"); };
-    var jobs = Array.prototype.map.call(pics, function (img) {
-      return img.decode ? img.decode().catch(function () {}) : Promise.resolve();
-    });
-    Promise.all(jobs).then(ready);
-    setTimeout(ready, 3000);
+     The coloured strokes behind each photograph are pseudo-elements masked by
+     that same photograph. Until the mask image has decoded there is nothing to
+     cut the shape with, so they paint as plain rectangles — which is exactly
+     what made the cut-outs look broken. Each slot reveals its own stroke when
+     its own picture has arrived, so a lazy image still off screen simply stays
+     hidden, and one that never loads never shows a rectangle. */
+  document.querySelectorAll(".cast-slot").forEach(function (slot) {
+    var img = slot.querySelector("img");
+    if (!img) return;
+    var reveal = function () {
+      if (img.naturalWidth > 0) slot.classList.add("is-ready");
+    };
+    if (img.complete) { reveal(); } else { img.addEventListener("load", reveal, { once: true }); }
   });
 
   /* ---------------------------------------------- scroll reveal */

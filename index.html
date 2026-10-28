@@ -362,7 +362,7 @@
            alt="A smiling child in a maroon polo shirt, arms folded"
            width="620" height="930" loading="lazy" decoding="async"></span>
       <p class="eyebrow eyebrow-dot" style="justify-content:center">Admissions open</p>
-      <h2>Enrol now — Playing Class through to P.1.</h2>
+      <h2><span class="hl">Enrol now</span> — Playing Class through to P.1.</h2>
       <p class="lede">Come and see the classrooms, meet the staff and ask us anything. We are <strong class="shout">opposite Munyonyo C.O.U. Church</strong>.</p>
       <a class="cta-phone" href="tel:+256774197708">
         <svg viewBox="0 0 24 24" aria-hidden="true" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
@@ -429,5 +429,17 @@
 </a>
 
 <script src="assets/js/main.js"></script>
+
+<!-- Crayon texture for the highlight marks. feTurbulence generates the noise
+     and feDisplacementMap pushes the bar edges around with it, which is what
+     gives the waxy, skipped-over-paper edge. Generated, so it costs no
+     bandwidth and stays sharp at any size. -->
+<svg aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute">
+  <filter id="crayon" x="-15%" y="-40%" width="130%" height="180%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.06 0.8" numOctaves="4" seed="7" result="grain"/>
+    <feDisplacementMap in="SourceGraphic" in2="grain" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
 </body>
 </html>
