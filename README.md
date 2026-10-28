@@ -151,37 +151,53 @@ news ticker. A lede paragraph used to sit between the headline and the ticker, b
 repeated the chips (the programmes) and the ticker (hours, place, phone), so it came
 out. The page description meta tag still carries that wording for search engines.
 
-### The pupil at the seam
+### The hero layout
 
-`assets/img/pupil.webp` is a cut-out photograph standing where the hero meets the
-sheet. She is a child of `.after-hero` rather than of the hero, and that placement
-does two jobs at once: the sheet carries `z-index: 1`, so anything inside it paints
-above the pinned hero, and she rides up with the sheet as you scroll instead of
-staying behind with the hero.
+The hero is two columns: the school badge, the class chips, the headline and the
+news ticker on the left, and `assets/img/graduate.webp` standing on the floor of the
+card on the right. Below 900px they stack, wording above and the photograph beneath,
+both pushed to the bottom of the card.
 
-Her `bottom` is `calc(100% - X)`, a percentage of the sheet's full height, so her
-feet sit X pixels below the sheet's top edge however long the page grows and the rest
-of her overhangs upward onto the hero.
+`.hero-media` now carries the hero's height itself, since there is no full-bleed
+illustration left to set it, and the photograph is capped (`max-height: 78lvh`)
+rather than given a height, so it can never be the thing that makes the hero taller
+than the screen.
 
-The outline is a chain of nine `drop-shadow()` filters: four build a white sticker
-rim, four more put the brand colours just outside it (red, navy, green, gold), and
-the last is a soft lift off the page. Each drop-shadow applies to the *result* of the
-previous one, and that is what makes concentric rings rather than one flat halo. The
-filter is static, so it rasterises once and the scroll animation only transforms the
-finished texture.
+One more constraint turned up here. The hero is sized against the viewport but its
+wording is sized against the text, and on a short window the wording wins: at
+1390x536 the column came to 665px inside a 536px viewport and pushed itself off the
+bottom. A `@media (max-height: 720px)` block compacts the column — smaller badge,
+tighter gaps, smaller headline — which is enough for the hero to keep its promise of
+fitting the screen.
 
-On scroll she rises and grows slightly on the same `--cover` timeline that fades the
-hero, so the two read as one movement: the scene recedes, she steps forward. There is
-deliberately no opacity in those keyframes — at scroll 0 she is already well inside
-the frame, so fading her in would mean loading the page with a visible hole where she
-stands.
+### The two photographs
 
-Two things to keep an eye on. **The file is 1024x1536 and 318KB** but is displayed at
-most 330px wide; it is `loading="lazy"` and below the fold at load, so it costs
-nothing up front, but halving it is worth doing before the site sees much mobile
-traffic. And the note further up about getting parents' permission before publishing
-photographs of children applies to this image as much as to any replacement for the
-illustrations.
+Both cut-outs share one rim: four `drop-shadow()` filters build a white sticker edge,
+four more put the brand colours just outside it, and the last lifts the whole thing
+off the page. Each drop-shadow applies to the *result* of the previous one, and that
+is what makes concentric rings instead of one flat halo. The filter is static, so it
+rasterises once and the animations only transform the finished texture.
+
+`pupil.webp` originally straddled the hero seam. The graduate now fills that corner,
+and the two overlapped across 72% of her, so she moved into the CTA panel — the one
+place on the page with real empty space beside the wording, and its own
+`overflow: hidden` crops her cleanly against the panel edge.
+
+Each photograph runs two animations at once: a scroll-linked one and a slow idle so
+they do not read as stickers. `animation-timeline` takes a list, one entry per
+animation, which is the only way to mix a scroll timeline and the document clock on
+a single element. The properties are split deliberately — the pupil's scroll arrival
+animates `translate` and `scale`, so her idle may only use `rotate`, while the
+graduate's scroll motion is `scale` alone, so hers gets `translate` and `rotate`.
+Independent transform properties compose; a second `transform` would simply have won.
+
+**A cascade trap worth knowing about.** The responsive `@media` blocks sit in the
+middle of the stylesheet, not at the end, so any component declared below them wins
+regardless of the media query — media queries add no specificity. The CTA's mobile
+`padding-bottom` was written in the 900px block and silently did nothing, because
+`.cta` is declared further down and its `padding` shorthand overrode it. Overrides
+for anything declared below the responsive section go in the **late overrides** block
+near the foot of the file instead.
 
 ### Playful touches
 
