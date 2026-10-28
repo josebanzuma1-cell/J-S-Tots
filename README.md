@@ -165,13 +165,20 @@ The news pill sits **above** the headline rather than below it, which is both th
 reference structure (pill, big type, subject) and the only way to keep it clear of
 the cast standing in front.
 
-**The row spreads with `space-evenly`, and the overlap had to go.** The children
+**Two of the four are parked, not deleted.** `kid-desk` and `kid-hand` are commented
+out in `index.html`, which also means the browser never fetches them — uncomment to
+bring them back. With two children the width budget stops being the binding
+constraint, so they grow until they nearly reach the wording instead.
+
+**The row spreads with `space-around`, and the overlap had to go.** The children
 used to be centred with a negative margin set from the viewport width
 (`clamp(-6rem, -4vw, -0.5rem)`). On a short screen the cast floors at its minimum
 height, so each child is only ~70px wide — and a -54px margin on a 70px child pulls
 them almost on top of each other. The row collapsed to **15% of the card**. The
 margin is gone; a width term in `--cast-h` keeps the row inside the card instead, and
-`space-evenly` distributes them whatever size they end up. The phone keeps its pair
+`space-around` distributes them whatever size they end up — with two, `space-evenly`
+would set them at a third and two thirds, which reads as a pair huddled in the middle
+of a wide card. The phone keeps its pair
 centred and overlapping, since only two show there.
 
 Every stroke ends in the brand red now, the way the CTA one does, so the cut-outs

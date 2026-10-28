@@ -523,14 +523,14 @@ li { margin-bottom: 0.45em; }
      not: the headline ends around 492px, so the cast may not exceed
      92lvh - 500px. The 300px cap keeps them small on a big monitor rather
      than letting them grow to fill it. */
-  --cast-h: clamp(150px, min(calc(92lvh - 490px),
-                             calc(0.274 * min(100vw - 64px, 1440px))), 460px);
+  --cast-h: clamp(150px, min(calc(92lvh - 480px),
+                             calc(0.55 * min(100vw - 64px, 1440px))), 560px);
   display: flex;
   align-items: flex-end;
   /* Spread, not clustered. They used to be centred with a viewport-width
      negative margin, which on a short screen pulled 70px-wide children
      together by 54px each — the row collapsed to 15% of the card. */
-  justify-content: space-evenly;
+  justify-content: space-around;
   gap: 0;
   padding-inline: clamp(0.3rem, 1.6vw, 1.6rem);
   pointer-events: none;
@@ -1721,18 +1721,14 @@ li { margin-bottom: 0.45em; }
   .doodle-bulb { width: 74px; left: -14px; top: -20px; }
   .doodle-star { width: 56px; right: -10px; top: -18px; }
 
-  /* A 340px-wide portrait hero cannot hold four children tall enough to fill a
-     92vh card: at four across they shrank to between 66 and 105px and left a
-     300px dead zone under the headline. The two most legible stay, at a size
-     that reaches the type. flex-shrink is off so they keep that size and let
+  /* Only the jumper and the graduate are in the markup now, so there is
+     nothing to hide here. flex-shrink is off so they keep their size and let
      the card edges crop them, which reads as a crowd rather than a squeeze. */
-  .slot-desk,
-  .slot-hand { display: none; }
   .cast-slot { flex-shrink: 0; }
   /* Only two show here, so the four-wide budget above does not apply. Sized
      so the pair overflow the card by a little and get cropped at its edges,
      rather than by 218px, which had them swallowing the whole hero. */
-  .hero-cast { --cast-h: clamp(130px, calc(92lvh - 440px), 300px); }
+  .hero-cast { --cast-h: clamp(140px, calc(92lvh - 420px), 330px); }
   .hero-cast { justify-content: center; }
   .cast-slot + .cast-slot { margin-left: -12%; }
 }
@@ -1778,7 +1774,9 @@ li { margin-bottom: 0.45em; }
   }
   .hero-overlay h1 { font-size: clamp(1.5rem, 3.2vw, 2.4rem); }
   .hero-badge { width: clamp(38px, 3.8vw, 56px); }
-  .hero-cast { --cast-scale: 0.74; }
+  /* --cast-scale is gone: it existed to squeeze four children across a short
+     window, and with two it only shrank them twice over. --cast-h already
+     tracks the viewport height on its own. */
 }
 
 /* --------------------------------------------------- print */
