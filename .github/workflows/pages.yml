@@ -1,0 +1,51 @@
+# Publishes the site to GitHub Pages.
+#
+# The repository's Pages source is set to "GitHub Actions", which means GitHub
+# does not build on push by itself — it waits for a workflow like this one to
+# upload and deploy. Without it, pushes land on main and nothing is published,
+# which is exactly what happened before this file existed.
+#
+# If the Pages source is ever switched back to "Deploy from a branch", delete
+# this workflow: the two cannot both run, and deploy-pages fails with
+# "Pages site configured to build from branch" when the branch source wins.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # lets the deploy be re-run by hand from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# never let two deploys race; queue instead of cancelling a half-finished one
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      # the site is plain HTML/CSS/JS with no build step, so the repository
+      # root is the artifact as-is
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
