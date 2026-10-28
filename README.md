@@ -165,6 +165,19 @@ The news pill sits **above** the headline rather than below it, which is both th
 reference structure (pill, big type, subject) and the only way to keep it clear of
 the cast standing in front.
 
+**The cast is sized by height, not width**, and that is what makes the overlap
+reliable. The headline's bottom edge barely moves across viewports, while the hero
+scales with the screen, so width-based sizing made the overlap swing wildly: +139px
+on a 1366x768 laptop, +38px at 1440x900, and **-123px at 1920x1080**, where the
+effect vanished completely. One `--cast-h` on `.hero-cast` now tracks `92lvh` with a
+second term capping it so the row cannot outgrow the card, and the slots take
+multiples of it. Measured overlaps are now 43px at 1440x900, around 20px at
+1920x1080 and a 24px gap at 1024x768.
+
+The children also stand slightly in front of one another. That negative margin is
+not decoration: it is what buys the height on a wide screen without the row
+outgrowing the card.
+
 `.hero-cast` is absolutely positioned, deliberately. Four photographs must never be
 the thing that decides how tall the hero is — letting a picture drive that height is
 the fault that put the wording below the fold twice before.
