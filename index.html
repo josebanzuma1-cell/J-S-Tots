@@ -43,19 +43,24 @@
   <!-- ============================================= hero -->
   <section class="hero">
     <div class="hero-media">
-      <img src="assets/img/illus-hero.svg" alt="Children playing outside the J &amp; S Tots Pre-School building" width="1200" height="740">
       <div class="hero-overlay">
-        <div class="hero-badges">
-          <span class="chip chip-red">Playing Class</span>
-          <span class="chip chip-navy">Nursery</span>
-          <span class="chip chip-green">Primary One</span>
-          <span class="chip chip-gold">Kids Activity</span>
-        </div>
-        <h1>Where every child is known, loved and ready to learn.</h1>
+        <img class="hero-badge" src="assets/img/logo.svg" alt="" width="104" height="104">
         <div class="ticker">
           <span class="ticker-badge">News</span>
           <span class="ticker-text" data-messages='["Admissions are open for Playing Class through to P.1 — enrol today.","Classes run Monday to Friday, 8:00 am to 5:00 pm.","Find us opposite Munyonyo C.O.U. Church.","Call 0774 197 708 to arrange a visit."]'>Admissions are open for Playing Class through to P.1 — enrol today.</span>
         </div>
+        <h1>Where every child is known, loved and ready to learn.</h1>
+      </div>
+
+      <!-- The cast stands along the floor of the hero and breaks the bottom of
+           the headline, the way the reference images put the subject in front
+           of the type. alt="" on all but the graduate: they are one decorative
+           group, and the h1 already carries the meaning. -->
+      <div class="hero-cast">
+        <img class="cast cast-desk" src="assets/img/kid-desk.webp" alt="" width="900" height="505" decoding="async">
+        <img class="cast cast-jump" src="assets/img/kid-jump.webp" alt="" width="700" height="953" decoding="async">
+        <img class="cast cast-grad" src="assets/img/kid-grad.webp" alt="A pre-school graduate in a cap and gown" width="700" height="933" fetchpriority="high" decoding="async">
+        <img class="cast cast-hand" src="assets/img/kid-hand.webp" alt="" width="700" height="1050" decoding="async">
       </div>
     </div>
   </section>
@@ -66,14 +71,7 @@
        straight through them. Deliberately not re-indented, to keep
        the diff readable. -->
   <div class="after-hero">
-  <!-- She stands at the seam, overlapping the fading hero above and the sheet
-       below. She belongs to .after-hero rather than to the hero for two
-       reasons: the sheet carries z-index 1, so anything inside it paints above
-       the pinned hero; and she then rides up with the sheet as you scroll
-       instead of staying behind with the hero. -->
-  <img class="pupil" src="assets/img/pupil.webp"
-       alt="A smiling child in a maroon polo shirt, arms folded"
-       width="1024" height="1536" loading="lazy" decoding="async">
+
   <!-- ============================================= why choose us, icon row -->
   <section class="section">
     <div class="wrap">
@@ -358,6 +356,11 @@
   <!-- ============================================= CTA -->
   <section class="section-tight">
     <div class="cta reveal">
+      <!-- The cast now stands along the hero floor where she used to, so she
+           moved here, where the panel has space beside the centred wording. -->
+      <img class="pupil" src="assets/img/pupil.webp"
+           alt="A smiling child in a maroon polo shirt, arms folded"
+           width="620" height="930" loading="lazy" decoding="async">
       <p class="eyebrow eyebrow-dot" style="justify-content:center">Admissions open</p>
       <h2>Enrol now — Playing Class through to P.1.</h2>
       <p class="lede">Come and see the classrooms, meet the staff and ask us anything. We are <strong class="shout">opposite Munyonyo C.O.U. Church</strong>.</p>

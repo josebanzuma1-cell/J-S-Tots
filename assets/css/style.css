@@ -360,35 +360,40 @@ li { margin-bottom: 0.45em; }
   box-shadow: 0 -16px 44px rgba(59, 34, 23, 0.14);
 }
 
-/* --------------------------------------------------- the pupil at the seam
-   A cut-out photograph standing where the hero meets the sheet. `bottom` is a
-   percentage of .after-hero's full height, so `calc(100% - X)` puts her feet X
-   pixels below the sheet's top edge however long the page gets, and the rest
-   of her overhangs upward onto the hero. */
+/* --------------------------------------------------- the pupil in the CTA
+   She used to straddle the hero seam. The cast now stands along that floor,
+   so she moved to the CTA panel, whose own overflow:hidden crops her cleanly
+   against the panel edge. */
 .pupil {
   position: absolute;
-  z-index: 3;
-  right: clamp(0.5rem, 4vw, 4.5rem);
-  bottom: calc(100% - clamp(34px, 6vw, 86px));
-  width: clamp(142px, 23vw, 330px);
+  right: clamp(0.5rem, 2vw, 2.5rem);
+  bottom: 0;
+  width: clamp(170px, 19vw, 275px);
   height: auto;
   pointer-events: none;
   transform-origin: bottom center;
-  /* A white sticker rim first, then the brand ring outside it, then a lift off
-     the page. Chained drop-shadows each apply to the previous result, and that
-     is what builds the rings rather than one flat halo. Nine passes is a lot,
-     but the filter is static, so it rasterises once and the scroll animation
-     below only transforms the finished texture. */
-  filter:
-    drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff)
-    drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff)
-    drop-shadow(3px 0 0 var(--red)) drop-shadow(-3px 0 0 var(--navy))
-    drop-shadow(0 3px 0 var(--green)) drop-shadow(0 -3px 0 var(--gold))
-    drop-shadow(0 16px 20px rgba(59, 34, 23, 0.28));
 }
 
-/* The media box is a single-cell grid: the picture and the caption share the
-   cell, so the box can never be shorter than the words inside it. */
+/* --------------------------------------------------- the photo rim
+   Every cut-out carries the same sticker edge: four drop-shadows build a white
+   rim, four more put the brand colours just outside it, and the last lifts it
+   off the page. Each applies to the RESULT of the previous, which is what makes
+   concentric rings rather than one flat halo. Static, so it rasterises once. */
+.pupil,
+.cast {
+  filter:
+    drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff)
+    drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff)
+    drop-shadow(5px 0 0 var(--red)) drop-shadow(-5px 0 0 var(--navy))
+    drop-shadow(0 5px 0 var(--green)) drop-shadow(0 -5px 0 var(--gold))
+    drop-shadow(0 18px 22px rgba(59, 34, 23, 0.3));
+}
+
+
+/* The hero is a stage: badge, news pill and headline in the upper half, and
+   the cast standing on the floor breaking the bottom of the type — the move
+   every one of the reference posters makes. The box carries the hero's own
+   height, since there is no full-bleed picture left to set it. */
 .hero-media {
   position: relative;
   width: min(100% - (var(--gutter) * 2), 1440px);
@@ -396,57 +401,83 @@ li { margin-bottom: 0.45em; }
   margin-top: calc(var(--nav-h) * -1);
   border-radius: var(--r-xl);
   overflow: hidden;
-  background: linear-gradient(170deg, #ffe9bd 0%, #ffd9a8 48%, #f8c98f 100%);
+  /* the warm glow of the reference poster, over the brand's own amber */
+  background:
+    radial-gradient(86% 64% at 50% 112%, rgba(255, 255, 255, 0.48) 0%, transparent 58%),
+    radial-gradient(70% 55% at 50% 12%, #ffd89c 0%, transparent 72%),
+    linear-gradient(168deg, #f6a93f 0%, #ef7a2a 46%, #df5220 100%);
   box-shadow: var(--shadow);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.hero-media > img,
-.hero-media > picture {
-  grid-area: 1 / 1;
-  min-width: 0;
-  width: 100%;
-  height: 100%;
-  /* The hero has to very nearly fill the screen, and not only for looks: the
-     fade is driven by the sheet entering the viewport, so a short hero means
-     the sheet is already on screen at scroll 0 and the hero loads part-faded.
-     Below roughly 85% of the viewport height that becomes visible; the old
-     720px cap put a 1920x1200 screen at 74%, which rendered the headline at
-     0.81 opacity before anyone had touched the page. */
+  /* floor and ceiling both: tall enough that the sheet stays off screen at
+     scroll 0, short enough that the wording stays on it */
   min-height: 92vh; /* fallback for browsers without lvh */
   min-height: max(470px, 92lvh);
-  /* ...and a ceiling, or the image's own 1200x740 ratio drives the box: at
-     1600x620 that made the hero 888px tall in a 620px viewport and pushed the
-     bottom-aligned wording clean off the screen. min-height still wins where
-     the two disagree, so the 470px floor survives on a very short window. */
-  max-height: 92vh; /* fallback for browsers without lvh */
+  max-height: 92vh;
   max-height: 92lvh;
-  object-fit: cover;
-  object-position: center 56%;
 }
 
 .hero-overlay {
-  grid-area: 1 / 1;
   position: relative;
+  z-index: 2;
   min-width: 0;
-  align-self: end;
-  padding: calc(var(--nav-h) + 1rem) clamp(1.4rem, 4vw, 3rem) clamp(1.4rem, 3.4vw, 2.6rem);
-  background: linear-gradient(to top, rgba(50, 28, 18, 0.78) 0%, rgba(50, 28, 18, 0.4) 46%, transparent 100%);
+  padding: calc(var(--nav-h) + 0.5rem) clamp(1.2rem, 4vw, 3.2rem) 0;
   color: #fff;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  align-items: center;
+  text-align: center;
+  gap: 0.85rem;
+}
+
+.hero-badge {
+  width: clamp(52px, 5.6vw, 84px);
+  height: auto;
+  filter: drop-shadow(0 6px 14px rgba(90, 34, 8, 0.32));
 }
 
 .hero-overlay h1 {
   color: #fff;
   margin: 0;
   max-width: 17ch;
-  text-shadow: 0 2px 18px rgba(40, 20, 10, 0.3);
+  text-shadow: 0 3px 22px rgba(110, 42, 10, 0.32);
 }
 
-.hero-overlay .lede { color: rgba(255, 255, 255, 0.92); max-width: 48ch; }
+/* --------------------------------------------------- the cast
+   Absolutely positioned on purpose: four photographs must never be the thing
+   that decides how tall the hero is. Letting a picture drive that height is
+   the fault that put the wording below the fold twice already. */
+.hero-cast {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(0.1rem, 0.8vw, 1rem);
+  padding-inline: clamp(0.3rem, 1.6vw, 1.6rem);
+  pointer-events: none;
+}
+
+.cast {
+  display: block;
+  height: auto;
+  /* min-width:0 lets them shrink together rather than overflow the row on a
+     narrow screen; height follows the aspect ratio, so they shorten with it */
+  min-width: 0;
+  max-height: 62vh;
+  max-height: 62lvh;
+  object-fit: contain;
+  object-position: bottom center;
+}
+
+/* Sized per crop: the desk shot is landscape and sits low, the graduate is
+   the tallest and anchors the middle. Her width sets how far the cast rises
+   into the headline, because she is the tallest: at 22vw the overlap reached
+   66px and her cap swallowed the last word of the line, so she is trimmed to
+   land around 40px, which clips the type without hiding any of it. */
+.cast-desk { width: clamp(170px, 30vw, 460px); }
+.cast-jump { width: clamp(110px, 19vw, 290px); }
+.cast-grad { width: clamp(130px, 21vw, 306px); }
+.cast-hand { width: clamp(105px, 18vw, 270px); }
 
 .hero-badges {
   display: flex;
@@ -1259,6 +1290,15 @@ li { margin-bottom: 0.45em; }
   .hero-overlay > *:nth-child(3) { animation-delay: 0.24s; }
   .hero-overlay > *:nth-child(4) { animation-delay: 0.33s; }
 
+  @keyframes cast-idle {
+    0%, 100% { translate: 0 0; rotate: 0deg; }
+    50%      { translate: 0 -9px; rotate: 0.8deg; }
+  }
+  .cast { animation: cast-idle 5.6s ease-in-out infinite; }
+  .cast-jump { animation-duration: 4.4s; animation-delay: -1.1s; }
+  .cast-grad { animation-duration: 6.2s; animation-delay: -2.3s; }
+  .cast-hand { animation-duration: 5s;   animation-delay: -3.1s; }
+
   @supports (animation-timeline: view()) {
 
     /* ---- the home hero falls away as the page scrolls past it.
@@ -1277,7 +1317,7 @@ li { margin-bottom: 0.45em; }
 
     .hero-media,
     .hero-overlay,
-    .hero-media > img {
+    .hero-cast {
       animation-timeline: --cover;
       animation-timing-function: linear;
       animation-fill-mode: both;
@@ -1293,7 +1333,7 @@ li { margin-bottom: 0.45em; }
       animation-range: entry 15% entry 100%;
     }
 
-    .hero-media > img {
+    .hero-cast {
       animation-name: hero-push-in;
       animation-range: entry 0% entry 100%;
     }
@@ -1312,10 +1352,11 @@ li { margin-bottom: 0.45em; }
        Deliberately no opacity here: she is already well inside the frame at
        scroll 0 (top at 423px of a 900px viewport), so fading her in would mean
        loading the page with a visible hole where she stands. */
+    /* her own view timeline: she lives in the CTA now, nowhere near the hero */
     .pupil {
       animation: pupil-arrive linear both;
-      animation-timeline: --cover;
-      animation-range: entry 6% entry 58%;
+      animation-timeline: view();
+      animation-range: entry 12% entry 72%;
     }
     @keyframes pupil-arrive {
       from { translate: 0 30px; scale: 0.94; }
@@ -1453,7 +1494,7 @@ li { margin-bottom: 0.45em; }
   .hero-media { border-radius: var(--r-lg); }
   /* no min-height override here: the base rule now sizes the hero against the
      viewport at every width, which is what keeps the fade from pre-applying */
-  .hero-media > img { object-position: center 62%; }
+
   .tilt { rotate: none !important; }
   .value-item { grid-template-columns: 1fr; gap: 0.2rem; }
   .value-num { padding-top: 0; }
@@ -1468,6 +1509,18 @@ li { margin-bottom: 0.45em; }
   .doodle-ring { width: 112px; right: -14px; bottom: -22px; }
   .doodle-bulb { width: 74px; left: -14px; top: -20px; }
   .doodle-star { width: 56px; right: -10px; top: -18px; }
+
+  /* A 340px-wide portrait hero cannot hold four children tall enough to fill a
+     92vh card: at four across they shrank to between 66 and 105px and left a
+     300px dead zone under the headline. The two most legible stay, at a size
+     that reaches the type. flex-shrink is off so they keep that size and let
+     the card edges crop them, which reads as a crowd rather than a squeeze. */
+  .cast-desk,
+  .cast-hand { display: none; }
+  .cast { flex-shrink: 0; }
+  .cast-jump { width: 58%; }
+  .cast-grad { width: 78%; }
+  .cast + .cast { margin-left: -12%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1478,6 +1531,31 @@ li { margin-bottom: 0.45em; }
   }
   .js .reveal { opacity: 1; translate: none; }
   .carousel-track { scroll-behavior: auto; }
+}
+
+/* --------------------------------------------------- late overrides
+   These sit below .cta on purpose. The responsive blocks higher up cannot
+   override it — a media query adds no specificity, so .cta's own `padding`
+   shorthand, declared further down, simply wins. */
+@media (max-width: 900px) {
+  /* the centred CTA wording fills the panel at this width, so the panel grows
+     a foot for her to stand in rather than her standing on the buttons */
+  .cta { padding-bottom: clamp(12.5rem, 36vw, 15rem); }
+  .pupil { width: clamp(125px, 30vw, 190px); right: clamp(0.5rem, 4vw, 2rem); }
+}
+
+/* --------------------------------------------------- short windows
+   The hero is sized against the viewport but its wording is sized against the
+   text, and on a short window the wording wins. Compacting the column is what
+   keeps the hero's promise of fitting the screen. */
+@media (max-height: 720px) {
+  .hero-overlay {
+    padding-top: calc(var(--nav-h) + 0.2rem);
+    gap: 0.5rem;
+  }
+  .hero-overlay h1 { font-size: clamp(1.5rem, 3.2vw, 2.4rem); }
+  .hero-badge { width: clamp(38px, 3.8vw, 56px); }
+  .cast { max-height: 46vh; max-height: 46lvh; }
 }
 
 /* --------------------------------------------------- print */

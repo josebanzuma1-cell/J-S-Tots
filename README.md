@@ -151,37 +151,66 @@ news ticker. A lede paragraph used to sit between the headline and the ticker, b
 repeated the chips (the programmes) and the ticker (hours, place, phone), so it came
 out. The page description meta tag still carries that wording for search engines.
 
-### The pupil at the seam
+### The hero stage
 
-`assets/img/pupil.webp` is a cut-out photograph standing where the hero meets the
-sheet. She is a child of `.after-hero` rather than of the hero, and that placement
-does two jobs at once: the sheet carries `z-index: 1`, so anything inside it paints
-above the pinned hero, and she rides up with the sheet as you scroll instead of
-staying behind with the hero.
+The hero is a stage. The badge, the news pill and the headline sit in the upper
+half, and the cast — four cut-out children — stands along the floor and rises in
+front of the bottom of the type. That last part is the move every reference image
+makes, so it is worth getting right: at 22vw the graduate's cap reached 66px into
+the headline and swallowed the last word, so she is trimmed to land around 40px,
+which clips the line without hiding any of it. She sets the overlap for the whole
+row because she is the tallest.
 
-Her `bottom` is `calc(100% - X)`, a percentage of the sheet's full height, so her
-feet sit X pixels below the sheet's top edge however long the page grows and the rest
-of her overhangs upward onto the hero.
+The news pill sits **above** the headline rather than below it, which is both the
+reference structure (pill, big type, subject) and the only way to keep it clear of
+the cast standing in front.
 
-The outline is a chain of nine `drop-shadow()` filters: four build a white sticker
-rim, four more put the brand colours just outside it (red, navy, green, gold), and
-the last is a soft lift off the page. Each drop-shadow applies to the *result* of the
-previous one, and that is what makes concentric rings rather than one flat halo. The
-filter is static, so it rasterises once and the scroll animation only transforms the
-finished texture.
+`.hero-cast` is absolutely positioned, deliberately. Four photographs must never be
+the thing that decides how tall the hero is — letting a picture drive that height is
+the fault that put the wording below the fold twice before.
 
-On scroll she rises and grows slightly on the same `--cover` timeline that fades the
-hero, so the two read as one movement: the scene recedes, she steps forward. There is
-deliberately no opacity in those keyframes — at scroll 0 she is already well inside
-the frame, so fading her in would mean loading the page with a visible hole where she
-stands.
+Below 620px the row changes rather than shrinks. A 340px-wide portrait hero cannot
+hold four children tall enough to fill a 92vh card: at four across they shrank to
+between 66 and 105px and left a 300px dead zone under the headline. The two most
+legible stay, `flex-shrink` is turned off so they keep their size, and the card
+edges crop them — which reads as a crowd rather than a squeeze.
 
-Two things to keep an eye on. **The file is 1024x1536 and 318KB** but is displayed at
-most 330px wide; it is `loading="lazy"` and below the fold at load, so it costs
-nothing up front, but halving it is worth doing before the site sees much mobile
-traffic. And the note further up about getting parents' permission before publishing
-photographs of children applies to this image as much as to any replacement for the
-illustrations.
+### Cutting the photographs out
+
+Two of the four arrived with **no alpha channel** — opaque white rectangles. The rim
+traces whatever shape it is given, so they rendered as white boxes with a rectangular
+outline. There is no image tooling on this machine (no ImageMagick, no Python, no
+sharp), so the backgrounds were removed in a canvas in the browser: a flood fill
+seeded from the border pixels, so only white *connected to the edge* is cleared and
+interior whites — the jumping boy's shirt stripes — are untouched. A one-pixel alpha
+feather trims the fringe.
+
+The same pass downscaled everything to the size it is actually displayed at and
+re-encoded to WebP. **The hero payload went from 931KB to 338KB**, and the pupil from
+319KB to 105KB. If you replace any of these photographs, check the file has alpha
+(`VP8X` with the ALPHA flag) or it will come out as a white box.
+
+The dev server grew a temporary, allowlisted endpoint to receive those files and it
+was removed again straight afterwards; `server.js` has no write route.
+
+### The rim, and the pupil
+
+Every cut-out carries the same sticker edge: four `drop-shadow()` filters build a
+white rim, four more put the brand colours just outside it, and the last lifts it off
+the page. Each applies to the *result* of the previous one, which is what makes
+concentric rings rather than one flat halo. It is static, so it rasterises once.
+
+`pupil.webp` used to straddle the hero seam. The cast now stands along that floor, so
+she moved to the CTA panel, which has space beside its centred wording and crops her
+cleanly with its own `overflow: hidden`.
+
+**A cascade trap to know about.** The responsive `@media` blocks sit in the middle of
+the stylesheet, so any component declared below them wins regardless of the media
+query — media queries add no specificity. The CTA's mobile `padding-bottom` was
+written in the 900px block and silently did nothing, because `.cta` is declared
+further down and its `padding` shorthand overrode it. Overrides for anything declared
+below the responsive section go in the **late overrides** block at the foot of the
+file.
 
 ### Playful touches
 
