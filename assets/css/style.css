@@ -503,10 +503,12 @@ li { margin-bottom: 0.45em; }
           mask-position: bottom center;
   -webkit-mask-repeat: no-repeat;
           mask-repeat: no-repeat;
-  transform-origin: bottom center;
-  /* past 1 is what makes it a stroke rather than a silhouette hidden behind
-     the child; big enough that both gradient stops are actually visible */
-  scale: 1.1;
+  /* Grow it about its own centre, not its feet. Anchoring at bottom centre
+     pushed a 400px-tall silhouette ~58px upward at 1.1, which read as a ghost
+     standing behind the child rather than an outline around them. From the
+     centre a far smaller scale gives an even edge all the way round. */
+  transform-origin: center;
+  scale: 1.05;
   opacity: 0.95;
 }
 
@@ -1343,9 +1345,9 @@ li { margin-bottom: 0.45em; }
      never animates — that is a paint property and would cost a full repaint
      every frame on five shapes at once. These are transform-only. */
   @keyframes blob-float {
-    0%, 100% { translate: 0 0;     rotate: 0deg;    scale: 1.1; }
-    33%      { translate: -2% -4%; rotate: -3deg;   scale: 1.15; }
-    66%      { translate: 2% -2%;  rotate: 2.5deg;  scale: 1.06; }
+    0%, 100% { translate: 0 0;      rotate: 0deg;   scale: 1.05; }
+    33%      { translate: -1% -1.5%; rotate: -2deg; scale: 1.08; }
+    66%      { translate: 1% -0.5%;  rotate: 1.5deg; scale: 1.03; }
   }
   .cast-slot::before  { animation: blob-float 9s ease-in-out infinite; }
   .slot-jump::before  { animation-duration: 7.4s;  animation-delay: -2s; }

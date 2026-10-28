@@ -202,6 +202,11 @@ past 1 is what makes it read as a stroke peeking out at the edges. Each child ge
 different brand pair — red/gold, navy/sky, green/butter, lavender/peach, and gold/red
 for the pupil.
 
+It grows about its own **centre**, which matters more than it sounds. Anchored at
+`bottom center` a 400px-tall silhouette was pushed about 58px upward at scale 1.1,
+and it read as a ghost standing behind the child rather than an outline around them.
+From the centre, a far smaller 1.05 gives an even edge the whole way round.
+
 It levitates on `translate`, `rotate` and `scale` only. An earlier version animated
 `border-radius` to morph a blob shape, which looks the same but is a paint property:
 five shapes morphing would repaint every frame. Rotating and unevenly scaling an
