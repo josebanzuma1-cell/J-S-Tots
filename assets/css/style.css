@@ -388,8 +388,8 @@ li { margin-bottom: 0.45em; }
   /* just the white sticker edge and a lift now — the brand colours moved to
      the floating stroke behind, which halves the filter passes as well */
   filter:
-    drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff)
-    drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff)
+    drop-shadow(4px 0 0 #fff) drop-shadow(-4px 0 0 #fff)
+    drop-shadow(0 4px 0 #fff) drop-shadow(0 -4px 0 #fff)
     drop-shadow(0 14px 18px rgba(59, 34, 23, 0.3));
 }
 
@@ -523,11 +523,15 @@ li { margin-bottom: 0.45em; }
      not: the headline ends around 492px, so the cast may not exceed
      92lvh - 500px. The 300px cap keeps them small on a big monitor rather
      than letting them grow to fill it. */
-  --cast-h: clamp(140px, calc(92lvh - 490px), 460px);
+  --cast-h: clamp(150px, min(calc(92lvh - 490px),
+                             calc(0.274 * min(100vw - 64px, 1440px))), 460px);
   display: flex;
   align-items: flex-end;
-  justify-content: center;
-  gap: clamp(0.1rem, 0.8vw, 1rem);
+  /* Spread, not clustered. They used to be centred with a viewport-width
+     negative margin, which on a short screen pulled 70px-wide children
+     together by 54px each — the row collapsed to 15% of the card. */
+  justify-content: space-evenly;
+  gap: 0;
   padding-inline: clamp(0.3rem, 1.6vw, 1.6rem);
   pointer-events: none;
 }
@@ -620,11 +624,14 @@ li { margin-bottom: 0.45em; }
 }
 
 /* two brand colours each, and the photograph that cuts the shape */
-.slot-desk  { --b1: var(--red);   --b2: var(--gold);   --img: url("../img/kid-desk.webp"); }
-.slot-jump  { --b1: var(--navy);  --b2: var(--sky);    --img: url("../img/kid-jump.webp"); }
-.slot-grad  { --b1: var(--green); --b2: var(--butter); --img: url("../img/kid-grad.webp"); }
-.slot-hand  { --b1: var(--lav);   --b2: var(--peach);  --img: url("../img/kid-hand.webp"); }
-.slot-pupil { --b1: var(--gold);  --b2: var(--red);    --img: url("../img/pupil.webp"); }
+/* Every stroke now ends in the brand red, the way the CTA one does, so the
+   cut-outs read as one family instead of four unrelated pairs. The first stop
+   still differs per child, so each keeps two colours. */
+.slot-desk  { --b1: var(--gold);   --b2: var(--red); --img: url("../img/kid-desk.webp"); }
+.slot-jump  { --b1: var(--sky);    --b2: var(--red); --img: url("../img/kid-jump.webp"); }
+.slot-grad  { --b1: var(--butter); --b2: var(--red); --img: url("../img/kid-grad.webp"); }
+.slot-hand  { --b1: var(--peach);  --b2: var(--red); --img: url("../img/kid-hand.webp"); }
+.slot-pupil { --b1: var(--gold);   --b2: var(--red); --img: url("../img/pupil.webp"); }
 
 /* Sized per crop: the desk shot is landscape and sits low, the graduate is
    the tallest and anchors the middle. Her width sets how far the cast rises
@@ -637,9 +644,8 @@ li { margin-bottom: 0.45em; }
 .slot-grad { --h: 1; }
 .slot-hand { --h: 0.96; }
 
-/* they stand shoulder to shoulder, slightly in front of one another, which is
-   what buys the height on a wide screen without the row outgrowing the card */
-.cast-slot + .cast-slot { margin-left: clamp(-6rem, -4vw, -0.5rem); }
+/* No negative margin any more: space-evenly does the spacing, and the row is
+   kept inside the card by the width term in --cast-h instead. */
 
 .hero-badges {
   display: flex;
@@ -1727,6 +1733,7 @@ li { margin-bottom: 0.45em; }
      so the pair overflow the card by a little and get cropped at its edges,
      rather than by 218px, which had them swallowing the whole hero. */
   .hero-cast { --cast-h: clamp(130px, calc(92lvh - 440px), 300px); }
+  .hero-cast { justify-content: center; }
   .cast-slot + .cast-slot { margin-left: -12%; }
 }
 
