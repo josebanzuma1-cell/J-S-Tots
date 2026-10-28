@@ -389,6 +389,12 @@ li { margin-bottom: 0.45em; }
      0.81 opacity before anyone had touched the page. */
   min-height: 92vh; /* fallback for browsers without lvh */
   min-height: max(470px, 92lvh);
+  /* ...and a ceiling, or the image's own 1200x740 ratio drives the box: at
+     1600x620 that made the hero 888px tall in a 620px viewport and pushed the
+     bottom-aligned wording clean off the screen. min-height still wins where
+     the two disagree, so the 470px floor survives on a very short window. */
+  max-height: 92vh; /* fallback for browsers without lvh */
+  max-height: 92lvh;
   object-fit: cover;
   object-position: center 56%;
 }

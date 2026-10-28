@@ -133,6 +133,19 @@ It is now `max(470px, 92lvh)`, which holds the ratio at 0.92 from that phone up 
 1600x1440 monitor. **If you change that min-height, check the headline is still fully
 opaque at scroll 0 on a tall screen.**
 
+There is a ceiling as well as a floor, and it exists for the opposite reason. The
+hero illustration is 1200x740, and with only a `min-height` the image's own ratio
+drove the box on wide, short windows: at 1600x620 the hero came out **888px tall
+inside a 620px viewport**, which pushed the bottom-aligned wording clean off the
+screen. `max-height: 92lvh` caps it, and `min-height` still wins where the two
+disagree, so the 470px floor survives on a very short window.
+
+So the hero has two things to hold at once, and they pull against each other: **at
+least ~85% of the viewport height**, or it loads part-faded, and **no more than the
+viewport height**, or the wording falls below the fold. Both are satisfied at 0.92.
+After changing either value, check a wide short window (1600x620) as well as a tall
+one (1920x1200) — each catches only one of the two faults.
+
 The hero itself carries only three things: the programme chips, the headline and the
 news ticker. A lede paragraph used to sit between the headline and the ticker, but it
 repeated the chips (the programmes) and the ticker (hours, place, phone), so it came
