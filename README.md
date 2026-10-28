@@ -151,6 +151,38 @@ news ticker. A lede paragraph used to sit between the headline and the ticker, b
 repeated the chips (the programmes) and the ticker (hours, place, phone), so it came
 out. The page description meta tag still carries that wording for search engines.
 
+### The pupil at the seam
+
+`assets/img/pupil.webp` is a cut-out photograph standing where the hero meets the
+sheet. She is a child of `.after-hero` rather than of the hero, and that placement
+does two jobs at once: the sheet carries `z-index: 1`, so anything inside it paints
+above the pinned hero, and she rides up with the sheet as you scroll instead of
+staying behind with the hero.
+
+Her `bottom` is `calc(100% - X)`, a percentage of the sheet's full height, so her
+feet sit X pixels below the sheet's top edge however long the page grows and the rest
+of her overhangs upward onto the hero.
+
+The outline is a chain of nine `drop-shadow()` filters: four build a white sticker
+rim, four more put the brand colours just outside it (red, navy, green, gold), and
+the last is a soft lift off the page. Each drop-shadow applies to the *result* of the
+previous one, and that is what makes concentric rings rather than one flat halo. The
+filter is static, so it rasterises once and the scroll animation only transforms the
+finished texture.
+
+On scroll she rises and grows slightly on the same `--cover` timeline that fades the
+hero, so the two read as one movement: the scene recedes, she steps forward. There is
+deliberately no opacity in those keyframes — at scroll 0 she is already well inside
+the frame, so fading her in would mean loading the page with a visible hole where she
+stands.
+
+Two things to keep an eye on. **The file is 1024x1536 and 318KB** but is displayed at
+most 330px wide; it is `loading="lazy"` and below the fold at load, so it costs
+nothing up front, but halving it is worth doing before the site sees much mobile
+traffic. And the note further up about getting parents' permission before publishing
+photographs of children applies to this image as much as to any replacement for the
+illustrations.
+
 ### Playful touches
 
 It is a pre-school, so nothing lands quite flat. `--ease-pop` overshoots a little and

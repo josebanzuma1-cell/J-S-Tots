@@ -360,6 +360,33 @@ li { margin-bottom: 0.45em; }
   box-shadow: 0 -16px 44px rgba(59, 34, 23, 0.14);
 }
 
+/* --------------------------------------------------- the pupil at the seam
+   A cut-out photograph standing where the hero meets the sheet. `bottom` is a
+   percentage of .after-hero's full height, so `calc(100% - X)` puts her feet X
+   pixels below the sheet's top edge however long the page gets, and the rest
+   of her overhangs upward onto the hero. */
+.pupil {
+  position: absolute;
+  z-index: 3;
+  right: clamp(0.5rem, 4vw, 4.5rem);
+  bottom: calc(100% - clamp(34px, 6vw, 86px));
+  width: clamp(142px, 23vw, 330px);
+  height: auto;
+  pointer-events: none;
+  transform-origin: bottom center;
+  /* A white sticker rim first, then the brand ring outside it, then a lift off
+     the page. Chained drop-shadows each apply to the previous result, and that
+     is what builds the rings rather than one flat halo. Nine passes is a lot,
+     but the filter is static, so it rasterises once and the scroll animation
+     below only transforms the finished texture. */
+  filter:
+    drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff)
+    drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff)
+    drop-shadow(3px 0 0 var(--red)) drop-shadow(-3px 0 0 var(--navy))
+    drop-shadow(0 3px 0 var(--green)) drop-shadow(0 -3px 0 var(--gold))
+    drop-shadow(0 16px 20px rgba(59, 34, 23, 0.28));
+}
+
 /* The media box is a single-cell grid: the picture and the caption share the
    cell, so the box can never be shorter than the words inside it. */
 .hero-media {
@@ -1277,6 +1304,23 @@ li { margin-bottom: 0.45em; }
     @keyframes hero-words-away { to { opacity: 0; translate: 0 -3.25rem; } }
     @keyframes hero-card-away  { to { opacity: 0.2; scale: 0.96; } }
     @keyframes hero-push-in    { to { scale: 1.06; } }
+
+    /* She rises into place as the sheet climbs over the fading hero: the hero
+       dissolves, she steps forward. Driven by the same --cover timeline as the
+       hero fade, so the two are locked together rather than merely similar.
+
+       Deliberately no opacity here: she is already well inside the frame at
+       scroll 0 (top at 423px of a 900px viewport), so fading her in would mean
+       loading the page with a visible hole where she stands. */
+    .pupil {
+      animation: pupil-arrive linear both;
+      animation-timeline: --cover;
+      animation-range: entry 6% entry 58%;
+    }
+    @keyframes pupil-arrive {
+      from { translate: 0 30px; scale: 0.94; }
+      to   { translate: 0 0; scale: 1; }
+    }
 
     /* ---- the inner pages' text hero gets the same courtesy, in one layer */
     .page-hero {
