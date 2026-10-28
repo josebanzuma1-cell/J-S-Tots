@@ -212,6 +212,10 @@ li { margin-bottom: 0.45em; }
 .btn-red { background: var(--red); color: #fff; box-shadow: var(--shadow-sm); }
 .btn-red:hover { background: #b81f25; box-shadow: var(--shadow); }
 
+/* the primary calls to action shout; ghost and link buttons stay sentence
+   case, so the emphasis still means something */
+.btn-dark, .btn-red { text-transform: uppercase; letter-spacing: 0.08em; }
+
 .btn-light {
   background: rgba(255, 255, 255, 0.75);
   color: var(--ink);
@@ -411,14 +415,17 @@ li { margin-bottom: 0.45em; }
   margin-bottom: 0.2rem;
 }
 
+/* Short labels carry caps well; long headings do not, so this treatment is
+   kept to chips, the primary buttons and the inline .shout accent below. */
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 0.45em;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   padding: 0.5em 0.95em;
   border-radius: var(--pill);
   background: rgba(255, 255, 255, 0.92);
@@ -426,6 +433,16 @@ li { margin-bottom: 0.45em; }
 }
 .chip-red { background: var(--red); color: #fff; }
 .chip-navy { background: var(--navy); color: #fff; }
+
+/* inline accent for a short key phrase inside body copy — two or three
+   words at most, or it stops being emphasis and starts being noise */
+.shout {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--red);
+}
 .chip-green { background: var(--green); color: #fff; }
 .chip-gold { background: var(--gold); color: var(--ink); }
 
@@ -549,6 +566,89 @@ li { margin-bottom: 0.45em; }
 .doodle-ring { width: 150px; right: -32px; bottom: -34px; color: var(--lav); }
 .doodle-bulb { width: 92px; left: -34px; top: -30px; color: var(--gold); }
 .doodle-star { width: 70px; right: -20px; top: -26px; color: var(--sage); }
+
+/* --------------------------------------------------- name blocks
+   The school name as a row of toy bricks. Static styling only; the bounce
+   and the eyes live in the motion section, behind the reduced-motion guard,
+   so this still looks deliberate when it never moves. */
+.blocks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(0.35rem, 1.1vw, 0.65rem);
+  margin: 0;
+  padding: 0;
+}
+
+.block-gap { width: clamp(0.5rem, 2vw, 1.4rem); }
+
+.block {
+  --size: clamp(50px, 8.5vw, 86px);
+  --g: #fff;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  border-radius: clamp(11px, 1.8vw, 18px);
+  background: var(--c);
+  color: var(--g);
+  /* the flat drop under each brick is what makes it read as a toy block
+     rather than a button */
+  box-shadow: 0 5px 0 rgba(59, 34, 23, 0.18), var(--shadow-sm);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: calc(var(--size) * 0.5);
+  line-height: 1;
+  user-select: none;
+  transition: rotate 0.25s var(--ease-pop), scale 0.25s var(--ease-pop);
+}
+
+/* every brick sits a little crooked, like they were set down by hand */
+.block:nth-child(odd) { rotate: -3deg; }
+.block:nth-child(even) { rotate: 2.6deg; }
+.block:hover { rotate: 0deg; scale: 1.08; }
+
+.block .glyph { grid-area: 1 / 1; }
+
+/* on a brick with eyes the letter drops to make room for the face */
+.has-eyes .glyph { margin-top: 26%; font-size: 0.8em; }
+
+.eyes {
+  grid-area: 1 / 1;
+  align-self: start;
+  margin-top: 15%;
+  display: flex;
+  gap: 0.28em;
+  font-size: calc(var(--size) * 0.26);
+}
+.eyes i {
+  position: relative;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: inset 0 0.08em 0.12em rgba(59, 34, 23, 0.28);
+}
+.eyes i::after {
+  content: "";
+  position: absolute;
+  width: 0.44em;
+  height: 0.44em;
+  border-radius: 50%;
+  background: var(--ink);
+  top: 30%;
+  left: 28%;
+}
+
+/* Below roughly 430px the seven bricks no longer fit on one line, and left to
+   itself flex-wrap breaks wherever it runs out of room — which split TOTS as
+   "T O / T S". Turning the gap into a full-width break makes the name stack as
+   J&S over TOTS instead. */
+@media (max-width: 480px) {
+  .block-gap { flex-basis: 100%; width: 0; height: 0; }
+}
 
 .stat-strip {
   display: grid;
@@ -1207,6 +1307,30 @@ li { margin-bottom: 0.45em; }
   .doodle { animation: doodle-bob 7s ease-in-out infinite; }
   .doodle-bulb { animation-duration: 8.4s; animation-delay: -2.6s; }
   .doodle-star { animation-duration: 6.2s; animation-delay: -1.3s; }
+
+  /* the name blocks bounce in a wave and the two faces blink and glance
+     about. This is far and away the busiest motion on the site — seven
+     bricks and four eyes, all looping — so if the page ever needs calming,
+     start here rather than with the doodles. */
+  @keyframes block-bounce { 50% { translate: 0 -12px; } }
+  .block {
+    animation: block-bounce 1.7s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.11s);
+  }
+
+  /* --i is set on the brick and custom properties inherit, so each face
+     blinks off the other's beat instead of in creepy unison */
+  @keyframes eye-blink { 0%, 90%, 100% { scale: 1 1; } 95% { scale: 1 0.1; } }
+  .eyes i {
+    animation: eye-blink 5.4s ease-in-out infinite;
+    animation-delay: calc(var(--i) * -1.7s);
+  }
+
+  @keyframes eye-look { 0%, 100% { translate: 0 0; } 30% { translate: 26% 10%; } 68% { translate: -22% 6%; } }
+  .eyes i::after {
+    animation: eye-look 4.6s ease-in-out infinite;
+    animation-delay: calc(var(--i) * -0.8s);
+  }
 
   /* a shake when you point at an icon, and a squash when you press a button */
   @keyframes wiggle { 25% { rotate: -9deg; } 75% { rotate: 9deg; } }

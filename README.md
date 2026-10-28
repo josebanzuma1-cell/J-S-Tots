@@ -130,11 +130,28 @@ drives the scroll reveals, the class chips spring to size one after another, the
 hand-drawn doodles drift on a slow loop, icons shake when you point at them, and
 buttons squash when pressed.
 
-The doodle drift is the only thing on the page that never stops. It is two small
-SVGs, transform-only and on the compositor — but if the page ever starts to feel
-busy, that is the first thing to drop. The doodles are also pulled in at phone widths
-(`max-width: 620px`), because hanging outside their box plus the bob's rotation put
-them a few pixels past the screen edge.
+The school name sits mid-page as a row of toy bricks (`.blocks`), two of them with
+eyes that blink and glance about. The row carries `role="img"` and its own label, so
+a screen reader hears "J and S Tots" rather than seven loose letters. Below about
+430px the bricks stop fitting on one line, so `.block-gap` becomes a full-width flex
+break and the name stacks as J&S over TOTS — left to itself, flex-wrap split it as
+"T O / T S".
+
+Two things loop forever: the doodle drift and the name blocks. The blocks are much
+the busier — seven bricks and four eyes — so if the page ever needs calming, start
+there rather than with the doodles. All of it is transform-only and stays on the
+compositor.
+
+### Capitals
+
+The site already set small labels in caps (eyebrows, feature headings, footer
+headings). That now extends to the class chips, the primary buttons (`.btn-dark` and
+`.btn-red`) and a `.shout` accent for a short key phrase inside body copy.
+
+Headings are deliberately left alone. Caps cost reading speed, which is a fair trade
+for a three-word label and a bad one for a sentence like "Where every child is known,
+loved and ready to learn." Ghost and link buttons stay sentence case as well, so that
+the emphasis on the primary action still means something.
 
 ### The two guards
 
