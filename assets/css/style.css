@@ -532,23 +532,29 @@ li { margin-bottom: 0.45em; }
   filter: url("#crayon");
   transform-origin: left center;
 }
-/* Inline accents get a crayon underline instead of a full bar, so body copy
-   stays readable. z-index on .shout is what keeps the -1 underline inside the
-   word rather than dropping behind the section. */
-.shout { position: relative; z-index: 0; }
-.shout::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: -0.1em;
-  right: -0.1em;
-  bottom: -0.04em;
-  height: 0.26em;
-  background: var(--gold);
-  border-radius: 0.4em 0.5em 0.35em 0.45em;
-  rotate: -0.7deg;
-  filter: url("#crayon");
-  transform-origin: left center;
+/* Inline accents get an underline rather than a full bar, so body copy stays
+   readable.
+
+   It is a background on the inline box, not an absolutely positioned ::after.
+   A bar cannot follow a phrase that wraps: the containing block of an
+   absolutely positioned child of a wrapped inline is the union of its
+   fragments, so on a phone "opposite Munyonyo C.O.U. Church" drew a 162px
+   underline that matched neither of its two lines, and "right here in
+   Munyonyo" drew one 3px wide. A background with box-decoration-break: clone
+   gives every line its own rule, the full width of that line.
+
+   The cost is the crayon texture — a filter here would roughen the words along
+   with the rule beneath them. .hl and .mark keep it: they mark short phrases
+   chosen not to wrap. */
+.shout {
+  padding-bottom: 0.1em;
+  background-image: linear-gradient(var(--gold), var(--gold));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0.24em;
+  border-radius: 0.3em;
+  -webkit-box-decoration-break: clone;
+          box-decoration-break: clone;
 }
 
 /* --------------------------------------------------- the cast
@@ -938,7 +944,6 @@ li { margin-bottom: 0.45em; }
 .d-plane    { --dw: clamp(34px, 4.6vw, 64px);  right: 6%;  top: 26%;     color: #fff; opacity: 0.92; }
 .d-trail    { --dw: clamp(74px, 10vw, 150px);  right: 11%; top: 33%;     color: #fff; opacity: 0.42; }
 .d-balloon  { --dw: clamp(36px, 5vw, 70px);    left: 41%;  top: 50%;     color: var(--red); opacity: 0.88; }
-.d-block    { --dw: clamp(38px, 5.2vw, 72px);  left: 44%;  bottom: 20%;  color: var(--sky); opacity: 0.95; }
 .d-squiggle { --dw: clamp(62px, 9vw, 136px);   left: 4%;   top: 37%;     color: var(--red); opacity: 0.68; }
 .d-rainbow  { --dw: clamp(78px, 16vw, 240px);  left: 38%;  bottom: -4%;  opacity: 0.58; }
 .d-star-a   { --dw: clamp(16px, 2.2vw, 30px);  left: 47%;  top: 49%;     color: #fff; }
@@ -1619,10 +1624,6 @@ li { margin-bottom: 0.45em; }
     0%, 100% { rotate: -1.1deg; }
     50%      { rotate: -0.1deg; }
   }
-  @keyframes crayon-wobble-thin {
-    0%, 100% { rotate: -0.7deg; }
-    50%      { rotate: 0.3deg; }
-  }
 
   .hero-overlay h1 .hl::before {
     animation: crayon-draw 0.5s var(--ease-pop) 0.55s both,
@@ -1631,13 +1632,19 @@ li { margin-bottom: 0.45em; }
 
   /* the ones further down wait for their block to be revealed */
   .js .reveal .hl::before,
-  .js .reveal .mark::before,
-  .js .reveal .shout::after { scale: 0 1; }
+  .js .reveal .mark::before { scale: 0 1; }
   .js .reveal.is-in .hl::before,
-  .js .reveal.is-in .mark::before,
-  .js .reveal.is-in .shout::after {
+  .js .reveal.is-in .mark::before {
     scale: 1 1;
     transition: scale 0.55s var(--ease-pop) 0.2s;
+  }
+  /* the underline draws itself the same way, but by growing its background
+     rather than scaling a box — and because the background is cloned per line
+     fragment, each line draws its own */
+  .js .reveal .shout { background-size: 0% 0.24em; }
+  .js .reveal.is-in .shout {
+    background-size: 100% 0.24em;
+    transition: background-size 0.55s var(--ease-pop) 0.2s;
   }
   .js .reveal.is-in .hl::before { animation: crayon-wobble 7.5s ease-in-out 1s infinite; }
   .js .reveal.is-in .mark::before { animation: crayon-wobble 8s ease-in-out 1.15s infinite; }
@@ -1664,15 +1671,6 @@ li { margin-bottom: 0.45em; }
   .fi-kite   { animation: fi-kite-kf   3.6s ease-in-out infinite; }
   .fi-blocks { animation: fi-blocks-kf 2.2s ease-in-out infinite; transform-origin: 50% 100%; }
 
-  /* the tiles lift as the pointer crosses them; the child rises a little
-     further than the tile so she parts from its floor rather than sliding
-     about on it */
-  .gallery-item { transition: translate 0.4s var(--ease), box-shadow 0.4s var(--ease); }
-  .gallery-item img { transition: scale 0.5s var(--ease); }
-  .gallery-item:hover { translate: 0 -5px; box-shadow: var(--shadow-sm); }
-  .gallery-item:hover img { scale: 1.05; }
-
-  .js .reveal.is-in .shout::after { animation: crayon-wobble-thin 8.5s ease-in-out 1.2s infinite; }
 
   @keyframes blob-float {
     0%, 100% { translate: 0 0;       rotate: 0deg;    scale: 1.09; }
@@ -1846,7 +1844,6 @@ li { margin-bottom: 0.45em; }
   .hero-doodles .d-cloud-a  { animation-duration: 11s;   animation-delay: -3s; }
   .hero-doodles .d-cloud-b  { animation-duration: 13s;   animation-delay: -6s; }
   .hero-doodles .d-balloon  { animation-duration: 8.6s;  animation-delay: -1.8s; }
-  .hero-doodles .d-block    { animation-duration: 9.4s;  animation-delay: -4.2s; }
   .hero-doodles .d-squiggle { animation-duration: 10.2s; animation-delay: -2.4s; }
   .hero-doodles .d-rainbow  { animation-duration: 12.5s; animation-delay: -5.5s; }
   .hero-doodles .d-star-a   { animation: doodle-twinkle 4.2s ease-in-out infinite; }
@@ -1974,8 +1971,7 @@ li { margin-bottom: 0.45em; }
   .hero-doodles .d-squiggle,
   .hero-doodles .d-star-a,
   .hero-doodles .d-star-c,
-  .hero-doodles .d-plane,
-  .hero-doodles .d-block { display: none; }
+  .hero-doodles .d-plane { display: none; }
   .d-cloud-b { right: 6%; top: 9%;     --dw: clamp(60px, 17vw, 96px); }
   .d-sun     { left: 5%;  top: 37%; }
   .d-balloon { right: 8%; left: auto; top: 36%; --dw: clamp(34px, 10vw, 52px); }
@@ -2043,46 +2039,6 @@ li { margin-bottom: 0.45em; }
      tracks the viewport height on its own. */
 }
 
-/* --------------------------------------------------- gallery
-   Every photograph on this site is a cut-out with a transparent ground, so a
-   plain grid of them would be children floating on cream with nothing holding
-   them. Each tile brings its own colour instead and the child stands on its
-   floor, which is the same idea as the mission frame and the hero cast.
-
-   The tiles are a fixed 4:3 and the picture is sized by HEIGHT inside them, so
-   five photographs of four different ratios still line up on one baseline. */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(0.7rem, 1.6vw, 1.2rem);
-}
-
-.gallery-item {
-  position: relative;
-  margin: 0;
-  aspect-ratio: 4 / 3;
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  box-shadow: var(--shadow-xs);
-}
-
-/* the landscape photograph gets the double-width tile; the four upright ones
-   take the singles, which is what keeps every child at a sensible scale */
-.gallery-wide { grid-column: span 2; aspect-ratio: 8 / 3; }
-
-.gallery-item img {
-  width: auto;
-  height: 94%;
-  max-width: none;
-  display: block;
-  /* the shadow follows the cut-out alpha, so it is the child's silhouette on
-     the tile rather than a rectangle */
-  filter: drop-shadow(0 8px 12px rgba(59, 34, 23, 0.2));
-}
-.gallery-wide img { height: 88%; }
 
 .g-sage   { background: linear-gradient(168deg, color-mix(in srgb, var(--sage) 38%, #fff), color-mix(in srgb, var(--sage) 16%, #fff)); }
 .g-sky    { background: linear-gradient(168deg, color-mix(in srgb, var(--sky) 46%, #fff), color-mix(in srgb, var(--sky) 18%, #fff)); }
@@ -2093,15 +2049,6 @@ li { margin-bottom: 0.45em; }
 /* Two columns on a phone, with the wide one still spanning both. One column
    would make each tile as wide as the screen and the section twice as long as
    the page it sits in. */
-@media (max-width: 760px) {
-  .gallery { grid-template-columns: repeat(2, 1fr); }
-  /* four of the five photographs are upright, and a 4:3 tile on a 172px column
-     left the children about 120px tall — too small to see a face. Upright
-     tiles on a phone give them nearly twice that. */
-  .gallery-item { aspect-ratio: 3 / 4; }
-  .gallery-wide { grid-column: span 2; aspect-ratio: 2 / 1; }
-}
-
 /* --------------------------------------------------- print */
 @media print {
   .nav-wrap, .wa-float, .carousel-nav, .btn { display: none !important; }
