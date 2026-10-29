@@ -409,9 +409,10 @@ li { margin-bottom: 0.45em; }
 .cast {
   /* just the white sticker edge and a lift now — the brand colours moved to
      the floating stroke behind, which halves the filter passes as well */
+  --rim: 3px;
   filter:
-    drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff)
-    drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff)
+    drop-shadow(var(--rim) 0 0 #fff) drop-shadow(calc(var(--rim) * -1) 0 0 #fff)
+    drop-shadow(0 var(--rim) 0 #fff) drop-shadow(0 calc(var(--rim) * -1) 0 #fff)
     drop-shadow(0 16px 20px rgba(59, 34, 23, 0.32));
 }
 
@@ -1945,6 +1946,11 @@ li { margin-bottom: 0.45em; }
 
   .hero-cast { justify-content: center; padding-inline: 2%; }
   .cast-slot + .cast-slot { margin-left: -20%; }
+
+  /* the cut-outs are smaller here, so the same rim reads thicker: hold the
+     proportion rather than the pixel */
+  .pupil,
+  .cast { --rim: 2px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
