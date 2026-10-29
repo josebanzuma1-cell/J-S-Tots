@@ -849,6 +849,38 @@ li { margin-bottom: 0.45em; }
 
 .split.is-reversed .split-media { order: 2; }
 
+/* A cut-out photograph in place of the illustration that used to sit here.
+   The illustration carried its own pale ground; the photograph has a
+   transparent one, so without a backdrop the rounded corners and the shadow
+   would be drawn around nothing and she would float on the cream. The frame
+   supplies the colour the illustration used to, and the picture keeps its
+   alpha so she still reads as a cut-out rather than a pasted rectangle.
+
+   No overflow: hidden here — the ring and bulb doodles are positioned to hang
+   over this box's edges on purpose, and clipping would cut them in half. */
+.split-media-photo {
+  background:
+    linear-gradient(168deg,
+      color-mix(in srgb, var(--sage) 34%, #fff) 0%,
+      color-mix(in srgb, var(--sage) 16%, #fff) 100%);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+}
+/* the frame carries the shadow now, so the picture must not draw a second one
+   around its own transparent box */
+.split-media-photo img {
+  box-shadow: none;
+  display: block;
+  /* .split-media img sets width: 100% and no height, so the HTML height
+     attribute is taken as the CSS height. The SVGs that rule was written for
+     letterbox inside that box and look unharmed; a photograph instead squashes
+     — this one rendered 554x505 against a natural 900x505, a 1.10 ratio where
+     it should be 1.78. Scoped here rather than fixed on .split-media img,
+     which would relayout the illustrations on three other pages. */
+  height: auto;
+}
+
+
 /* hand-drawn doodle decorations, like the reference */
 .doodle {
   position: absolute;
