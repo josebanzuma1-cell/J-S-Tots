@@ -859,6 +859,14 @@ li { margin-bottom: 0.45em; }
    No overflow: hidden here — the ring and bulb doodles are positioned to hang
    over this box's edges on purpose, and clipping would cut them in half. */
 .split-media-photo {
+  /* How far her head climbs above the frame. A percentage margin resolves
+     against the containing block WIDTH, not its height — which suits this: the
+     picture holds a fixed 1.78 ratio, so a share of the width is a fixed share
+     of the picture as well, and the protrusion stays put at every screen size.
+     18% of the width is about 32% of her height, which puts the frame line
+     behind her chin: her whole head clears it, rather than the line cutting
+     across her forehead. */
+  --protrude: 18%;
   background:
     linear-gradient(168deg,
       color-mix(in srgb, var(--sage) 34%, #fff) 0%,
@@ -866,11 +874,20 @@ li { margin-bottom: 0.45em; }
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-sm);
 }
-/* the frame carries the shadow now, so the picture must not draw a second one
-   around its own transparent box */
+/* She breaks the top of the frame rather than sitting inside it. Pulling the
+   picture up by a negative margin takes the frame height with it, because the
+   picture is its only in-flow content — so the tinted ground stops at her
+   shoulders while she carries on above it. The cut-out alpha is what makes it
+   read: only her head and hair paint above the line, not a rectangle of photo.
+
+   The drop-shadow follows that same alpha, so what falls on the panel is her
+   silhouette rather than a box, and she lifts off it instead of being pasted
+   on. The frame keeps its own box-shadow for the panel itself. */
 .split-media-photo img {
   box-shadow: none;
   display: block;
+  margin-top: calc(var(--protrude) * -1);
+  filter: drop-shadow(0 12px 16px rgba(59, 34, 23, 0.26));
   /* .split-media img sets width: 100% and no height, so the HTML height
      attribute is taken as the CSS height. The SVGs that rule was written for
      letterbox inside that box and look unharmed; a photograph instead squashes
