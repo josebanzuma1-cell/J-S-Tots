@@ -410,8 +410,8 @@ li { margin-bottom: 0.45em; }
   /* just the white sticker edge and a lift now — the brand colours moved to
      the floating stroke behind, which halves the filter passes as well */
   filter:
-    drop-shadow(6px 0 0 #fff) drop-shadow(-6px 0 0 #fff)
-    drop-shadow(0 6px 0 #fff) drop-shadow(0 -6px 0 #fff)
+    drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff)
+    drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff)
     drop-shadow(0 16px 20px rgba(59, 34, 23, 0.32));
 }
 
@@ -588,6 +588,10 @@ li { margin-bottom: 0.45em; }
    it. The slot exists so there is something to hang the floating stroke on —
    an <img> is a replaced element and will not render ::before. */
 .cast-slot {
+  /* one home for the two stroke opacities: the reveal rules below repeat
+     them, and a mismatch would show as a jump when the stroke fades in */
+  --stroke-in: 1;
+  --stroke-out: 0.85;
   position: relative;
   z-index: 0;
   display: block;
@@ -631,7 +635,7 @@ li { margin-bottom: 0.45em; }
      centre a far smaller scale gives an even edge all the way round. */
   transform-origin: center;
   scale: 1.09;
-  opacity: 0.95;
+  opacity: var(--stroke-in);
 }
 /* A second, wider stroke in the brand red sits behind the gradient one, so the
    edge reads as two layers rather than one. Same mask, larger scale, lower
@@ -652,11 +656,11 @@ li { margin-bottom: 0.45em; }
           mask-repeat: no-repeat;
   transform-origin: center;
   scale: 1.18 1.1;
-  opacity: 0.68;
+  opacity: var(--stroke-out);
 }
 .js .cast-slot::after { opacity: 0; }
 .js .cast-slot.is-ready::after {
-  opacity: 0.68;
+  opacity: var(--stroke-out);
   transition: opacity 0.45s var(--ease);
 }
 
@@ -667,7 +671,7 @@ li { margin-bottom: 0.45em; }
    arrived, so a lazy image that is still off screen simply stays hidden. */
 .js .cast-slot::before { opacity: 0; }
 .js .cast-slot.is-ready::before {
-  opacity: 0.95;
+  opacity: var(--stroke-in);
   transition: opacity 0.45s var(--ease);
 }
 
