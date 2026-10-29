@@ -486,6 +486,29 @@ li { margin-bottom: 0.45em; }
 .hero-overlay h1 .hl::before { box-shadow: 0 6px 16px rgba(120, 30, 10, 0.25); }
 .cta h2 .hl { color: #fff; }
 
+/* A highlighter pen rather than a marker bar. .hl lays solid red behind white
+   wording, which only works where the wording is already white; on the cream
+   pages the same treatment would bury the words. This one is translucent gold,
+   so dark text reads straight through it and one class can mark key points
+   anywhere on the site. It joins the same draw-on-reveal and wobble as .hl
+   below, so a page does not end up with two different crayon behaviours. */
+.mark {
+  position: relative;
+  z-index: 0;
+  white-space: nowrap;
+}
+.mark::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0.14em -0.22em 0.04em -0.22em;
+  background: var(--gold);
+  opacity: 0.45;
+  border-radius: 0.46em 0.38em 0.52em 0.34em;
+  rotate: -0.9deg;
+  filter: url("#crayon");
+  transform-origin: left center;
+}
 /* Inline accents get a crayon underline instead of a full bar, so body copy
    stays readable. z-index on .shout is what keeps the -1 underline inside the
    word rather than dropping behind the section. */
@@ -1120,6 +1143,34 @@ li { margin-bottom: 0.45em; }
 .flow-row h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
 .flow-row p { color: var(--muted); font-size: 0.96rem; }
 
+/* --------------------------------------------------- day-flow icons
+   The time column is 170px wide and the time itself uses about 70 of them, so
+   each activity's icon goes at that column's right-hand end — beside the thing
+   it illustrates, and without a column of its own, which would have come out
+   of the description's width. */
+.flow-time {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.flow-icon {
+  flex: none;
+  width: clamp(26px, 3vw, 34px);
+  line-height: 0;
+  transform-origin: 50% 85%;
+}
+.flow-icon svg { display: block; width: 100%; height: auto; }
+
+.fi-wave   { color: var(--gold); }
+.fi-note   { color: var(--navy); }
+.fi-pencil { color: var(--gold); }
+.fi-apple  { color: var(--red); }
+.fi-kite   { color: var(--navy); }
+.fi-ball   { color: var(--green); }
+.fi-blocks { color: var(--red); }
+.fi-house  { color: var(--navy); }
+
 /* --------------------------------------------------- testimonials */
 .quote-card {
   background: var(--paper);
@@ -1521,13 +1572,38 @@ li { margin-bottom: 0.45em; }
 
   /* the ones further down wait for their block to be revealed */
   .js .reveal .hl::before,
+  .js .reveal .mark::before,
   .js .reveal .shout::after { scale: 0 1; }
   .js .reveal.is-in .hl::before,
+  .js .reveal.is-in .mark::before,
   .js .reveal.is-in .shout::after {
     scale: 1 1;
     transition: scale 0.55s var(--ease-pop) 0.2s;
   }
   .js .reveal.is-in .hl::before { animation: crayon-wobble 7.5s ease-in-out 1s infinite; }
+  .js .reveal.is-in .mark::before { animation: crayon-wobble 8s ease-in-out 1.15s infinite; }
+
+  /* Each icon moves the way its own object would: the hand waves, the note
+     drifts up the stave, the pencil rocks as if writing, the apple squashes,
+     the ball bounces and the house sways. Six different tempos, none of them
+     a factor of another, so a column of six never pulses in unison. */
+  @keyframes fi-wave-kf   { 0%, 100% { rotate: -13deg; }                     50% { rotate: 15deg; } }
+  @keyframes fi-note-kf   { 0%, 100% { translate: 0 0;    rotate: -6deg; }   50% { translate: 0 -4px; rotate: 6deg; } }
+  @keyframes fi-pencil-kf { 0%, 100% { rotate: -8deg; }                      50% { rotate: 8deg; } }
+  @keyframes fi-apple-kf  { 0%, 100% { scale: 1 1; }                         50% { scale: 1.11 0.93; } }
+  @keyframes fi-ball-kf   { 0%, 100% { translate: 0 0; }                     45% { translate: 0 -7px; } }
+  @keyframes fi-house-kf  { 0%, 100% { translate: 0 0;   rotate: 0deg; }     50% { translate: 0 -3px; rotate: 3deg; } }
+  @keyframes fi-kite-kf   { 0%, 100% { translate: 0 0;   rotate: -7deg; }   50% { translate: 2px -5px; rotate: 8deg; } }
+  @keyframes fi-blocks-kf { 0%, 100% { translate: 0 0;   rotate: -4deg; }   50% { translate: 0 -3px;   rotate: 4deg; } }
+
+  .fi-wave   { animation: fi-wave-kf   2.4s ease-in-out infinite; }
+  .fi-note   { animation: fi-note-kf   3.1s ease-in-out infinite; }
+  .fi-pencil { animation: fi-pencil-kf 2.7s ease-in-out infinite; transform-origin: 50% 90%; }
+  .fi-apple  { animation: fi-apple-kf  2.9s ease-in-out infinite; transform-origin: 50% 100%; }
+  .fi-ball   { animation: fi-ball-kf   1.9s cubic-bezier(0.3, 0, 0.5, 1) infinite; }
+  .fi-house  { animation: fi-house-kf  3.4s ease-in-out infinite; }
+  .fi-kite   { animation: fi-kite-kf   3.6s ease-in-out infinite; }
+  .fi-blocks { animation: fi-blocks-kf 2.2s ease-in-out infinite; transform-origin: 50% 100%; }
   .js .reveal.is-in .shout::after { animation: crayon-wobble-thin 8.5s ease-in-out 1.2s infinite; }
 
   @keyframes blob-float {
@@ -1769,6 +1845,7 @@ li { margin-bottom: 0.45em; }
   .gallery .tall img { aspect-ratio: 1 / 1; }
 
   .flow-row { grid-template-columns: 1fr; gap: 0.3rem; }
+  .flow-time { justify-content: flex-start; gap: 0.7rem; }
 }
 
 @media (max-width: 620px) {

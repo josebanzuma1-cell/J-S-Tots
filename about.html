@@ -43,7 +43,7 @@
   <section class="page-hero">
     <div class="wrap">
       <p class="crumbs"><a href="index.html">Home</a><span>/</span>About</p>
-      <h1>A holistic child — that is the whole point.</h1>
+      <h1>A holistic child — that is <span class="mark">the whole point</span>.</h1>
       <p class="lede">J &amp; S Tots Pre-School is a small pre-school in Munyonyo, Kampala, caring for children from Playing Class through to Primary One.</p>
     </div>
   </section>
@@ -96,7 +96,7 @@
         </div>
         <div class="reveal reveal-d1">
           <p class="eyebrow eyebrow-dot">Our approach</p>
-          <h2>Play is not a break from learning. It is the learning.</h2>
+          <h2>Play is not a break from learning. It is <span class="mark">the learning</span>.</h2>
           <p>Children arrive at pre-school with very different starting points. Some are talkative, some watchful; some already know their letters, some are still learning to be away from home. Our job is not to rush them into one shape.</p>
           <p>So we build the day around doing rather than sitting. Children sing, build, count, paint, run and tell stories — and the letters and numbers arrive inside that, where they make sense. Teachers watch closely, step in gently, and let children find their own way to the answer wherever they can.</p>
           <p>By the time a child reaches Primary One, we want them confident, curious and kind. Those three carry further than anything else we could teach.</p>
@@ -183,7 +183,7 @@
   <section class="section-tight">
     <div class="cta reveal">
       <p class="eyebrow eyebrow-dot">Come and see</p>
-      <h2>The best way to judge a school is to stand in it.</h2>
+      <h2>The best way to judge a school is to <span class="hl">stand in it</span>.</h2>
       <p class="lede">Call ahead and we will show you the classrooms and answer your questions.</p>
       <a class="cta-phone" href="tel:+256774197708">
         <svg viewBox="0 0 24 24" aria-hidden="true" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
@@ -249,5 +249,17 @@
 </a>
 
 <script src="assets/js/main.js"></script>
+<!-- The crayon texture the highlighter marks are drawn with: turbulence
+     displaces their edges so they skip the way wax does over paper. Generated,
+     so it costs no bandwidth and stays sharp at any size. Every page that uses
+     .mark or .hl needs this: a filter: url() pointing at a missing filter makes
+     the element render as nothing in Chrome, so the marks would just vanish. -->
+<svg aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute">
+  <filter id="crayon" x="-15%" y="-40%" width="130%" height="180%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.06 0.8" numOctaves="4" seed="7" result="grain"/>
+    <feDisplacementMap in="SourceGraphic" in2="grain" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
 </body>
 </html>
