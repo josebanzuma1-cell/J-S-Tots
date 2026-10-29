@@ -1934,7 +1934,10 @@ li { margin-bottom: 0.45em; }
   .feature-row { grid-template-columns: 1fr; }
   .grid-3, .grid-2, .tilt-grid, .field-row { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
-  .hero-media { border-radius: var(--r-lg); }
+  .hero-media {
+    width: 100%;
+    border-radius: 0;
+  }
   /* no min-height override here: the base rule now sizes the hero against the
      viewport at every width, which is what keeps the fade from pre-applying */
 
