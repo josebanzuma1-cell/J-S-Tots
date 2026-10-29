@@ -360,6 +360,28 @@ li { margin-bottom: 0.45em; }
   box-shadow: 0 -16px 44px rgba(59, 34, 23, 0.14);
 }
 
+/* --------------------------------------------------- the jumper on the seam
+   He sits on the sheet's top-left corner and hangs above it, breaking the line
+   where the sheet climbs over the pinned hero. .after-hero does no overflow
+   clipping, which is what lets him overhang its edge, and it sits at z-index 1
+   over the hero's 0, so he paints in front of everything in the hero without
+   needing a z-index of his own.
+
+   The offset is a negative `top` rather than a translate: the scroll animation
+   below owns `translate`, and a centring translate here would simply be
+   overwritten the moment the timeline took hold — the same trap the CTA pupil
+   fell into. -0.57 of the cast height is about 62% of his own, since .slot-jump
+   stands at 0.92.
+
+   .cast-slot sets position: relative further up the file, so this needs the
+   descendant selector to outrank it; a bare .jumper would lose on file order. */
+.after-hero .jumper {
+  --cast-h: clamp(152px, 15vw, 250px);
+  position: absolute;
+  left: calc(max(var(--gutter), (100% - 1440px) / 2) + 1.2rem);
+  top: calc(var(--cast-h) * -0.57);
+  pointer-events: none;
+}
 /* --------------------------------------------------- the pupil in the CTA
    She used to straddle the hero seam. The cast now stands along that floor,
    so she moved to the CTA panel, whose own overflow:hidden crops her cleanly
@@ -1715,6 +1737,26 @@ li { margin-bottom: 0.45em; }
       animation-range: entry 18% entry 96%;
     }
     @keyframes media-settle { from { scale: 0.955; } to { scale: 1; } }
+
+    /* ---- the jumper rides the seam.
+       Same --cover timeline as the hero fade, but he travels up while the
+       sheet climbs and the hero settles back behind it, so three things move
+       at three different rates. That difference is the whole effect: he reads
+       as a layer standing in front of the seam rather than a sticker printed
+       on it. The rotate and scale are small on purpose — depth comes from the
+       rates disagreeing, not from any one of them being large.
+
+       He also carries the cast's idle float, but that lives on the <img> while
+       this drives the slot, so the two compose instead of overwriting. */
+    .jumper {
+      animation: jump-ride linear both;
+      animation-timeline: --cover;
+      animation-range: entry 0% entry 100%;
+    }
+    @keyframes jump-ride {
+      from { translate: 0 2.6rem;  rotate: 4deg;  scale: 0.88; }
+      to   { translate: 0 -2.4rem; rotate: -4deg; scale: 1.08; }
+    }
   }
 
   /* ---- a pre-school should feel springy, so nothing lands quite flat and
