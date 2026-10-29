@@ -1312,23 +1312,6 @@ li { margin-bottom: 0.45em; }
 .tilt h3 { margin-bottom: 0.4rem; }
 .tilt p { color: rgba(59, 34, 23, 0.72); font-size: 0.97rem; }
 
-/* --------------------------------------------------- gallery */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(0.7rem, 1.4vw, 1.1rem);
-}
-.gallery img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: var(--r);
-  transition: transform 0.4s var(--ease);
-}
-.gallery a:hover img { transform: scale(1.03); }
-.gallery .tall { grid-row: span 2; }
-.gallery .tall img { aspect-ratio: 1 / 2.07; }
-
 /* --------------------------------------------------- embedded map */
 .map-embed {
   position: relative;
@@ -1680,6 +1663,15 @@ li { margin-bottom: 0.45em; }
   .fi-house  { animation: fi-house-kf  3.4s ease-in-out infinite; }
   .fi-kite   { animation: fi-kite-kf   3.6s ease-in-out infinite; }
   .fi-blocks { animation: fi-blocks-kf 2.2s ease-in-out infinite; transform-origin: 50% 100%; }
+
+  /* the tiles lift as the pointer crosses them; the child rises a little
+     further than the tile so she parts from its floor rather than sliding
+     about on it */
+  .gallery-item { transition: translate 0.4s var(--ease), box-shadow 0.4s var(--ease); }
+  .gallery-item img { transition: scale 0.5s var(--ease); }
+  .gallery-item:hover { translate: 0 -5px; box-shadow: var(--shadow-sm); }
+  .gallery-item:hover img { scale: 1.05; }
+
   .js .reveal.is-in .shout::after { animation: crayon-wobble-thin 8.5s ease-in-out 1.2s infinite; }
 
   @keyframes blob-float {
@@ -1936,9 +1928,6 @@ li { margin-bottom: 0.45em; }
   .prog-card img { height: 190px; }
   .carousel-track > * { flex-basis: min(440px, 88%); }
 
-  .gallery { grid-template-columns: repeat(2, 1fr); }
-  .gallery .tall { grid-row: span 1; }
-  .gallery .tall img { aspect-ratio: 1 / 1; }
 
   .flow-row { grid-template-columns: 1fr; gap: 0.3rem; }
   .flow-time { justify-content: flex-start; gap: 0.7rem; }
@@ -2052,6 +2041,65 @@ li { margin-bottom: 0.45em; }
   /* --cast-scale is gone: it existed to squeeze four children across a short
      window, and with two it only shrank them twice over. --cast-h already
      tracks the viewport height on its own. */
+}
+
+/* --------------------------------------------------- gallery
+   Every photograph on this site is a cut-out with a transparent ground, so a
+   plain grid of them would be children floating on cream with nothing holding
+   them. Each tile brings its own colour instead and the child stands on its
+   floor, which is the same idea as the mission frame and the hero cast.
+
+   The tiles are a fixed 4:3 and the picture is sized by HEIGHT inside them, so
+   five photographs of four different ratios still line up on one baseline. */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.7rem, 1.6vw, 1.2rem);
+}
+
+.gallery-item {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  box-shadow: var(--shadow-xs);
+}
+
+/* the landscape photograph gets the double-width tile; the four upright ones
+   take the singles, which is what keeps every child at a sensible scale */
+.gallery-wide { grid-column: span 2; aspect-ratio: 8 / 3; }
+
+.gallery-item img {
+  width: auto;
+  height: 94%;
+  max-width: none;
+  display: block;
+  /* the shadow follows the cut-out alpha, so it is the child's silhouette on
+     the tile rather than a rectangle */
+  filter: drop-shadow(0 8px 12px rgba(59, 34, 23, 0.2));
+}
+.gallery-wide img { height: 88%; }
+
+.g-sage   { background: linear-gradient(168deg, color-mix(in srgb, var(--sage) 38%, #fff), color-mix(in srgb, var(--sage) 16%, #fff)); }
+.g-sky    { background: linear-gradient(168deg, color-mix(in srgb, var(--sky) 46%, #fff), color-mix(in srgb, var(--sky) 18%, #fff)); }
+.g-butter { background: linear-gradient(168deg, color-mix(in srgb, var(--butter) 42%, #fff), color-mix(in srgb, var(--butter) 16%, #fff)); }
+.g-peach  { background: linear-gradient(168deg, color-mix(in srgb, var(--peach) 40%, #fff), color-mix(in srgb, var(--peach) 16%, #fff)); }
+.g-lav    { background: linear-gradient(168deg, color-mix(in srgb, var(--lav) 48%, #fff), color-mix(in srgb, var(--lav) 20%, #fff)); }
+
+/* Two columns on a phone, with the wide one still spanning both. One column
+   would make each tile as wide as the screen and the section twice as long as
+   the page it sits in. */
+@media (max-width: 760px) {
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  /* four of the five photographs are upright, and a 4:3 tile on a 172px column
+     left the children about 120px tall — too small to see a face. Upright
+     tiles on a phone give them nearly twice that. */
+  .gallery-item { aspect-ratio: 3 / 4; }
+  .gallery-wide { grid-column: span 2; aspect-ratio: 2 / 1; }
 }
 
 /* --------------------------------------------------- print */
