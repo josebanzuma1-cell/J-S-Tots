@@ -1671,6 +1671,14 @@ li { margin-bottom: 0.45em; }
   .fi-kite   { animation: fi-kite-kf   3.6s ease-in-out infinite; }
   .fi-blocks { animation: fi-blocks-kf 2.2s ease-in-out infinite; transform-origin: 50% 100%; }
 
+  /* the tiles lift as the pointer crosses them; the child rises a little
+     further than the tile so she parts from its floor rather than sliding
+     about on it */
+  .gallery-item { transition: translate 0.4s var(--ease), box-shadow 0.4s var(--ease); }
+  .gallery-item img { transition: scale 0.5s var(--ease); }
+  .gallery-item:hover { translate: 0 -5px; box-shadow: var(--shadow-sm); }
+  .gallery-item:hover img { scale: 1.05; }
+
 
   @keyframes blob-float {
     0%, 100% { translate: 0 0;       rotate: 0deg;    scale: 1.09; }
@@ -2052,6 +2060,56 @@ li { margin-bottom: 0.45em; }
 /* Two columns on a phone, with the wide one still spanning both. One column
    would make each tile as wide as the screen and the section twice as long as
    the page it sits in. */
+/* --------------------------------------------------- gallery
+   Every photograph on this site is a cut-out with a transparent ground, so a
+   plain grid of them would be children floating on cream with nothing holding
+   them. Each tile brings its own colour instead and the child stands on its
+   floor, which is the same idea as the mission frame and the hero cast.
+
+   The tiles are a fixed 4:3 and the picture is sized by HEIGHT inside them, so
+   five photographs of four different ratios still line up on one baseline. */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.7rem, 1.6vw, 1.2rem);
+}
+
+.gallery-item {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  box-shadow: var(--shadow-xs);
+}
+
+/* the landscape photograph gets the double-width tile; the four upright ones
+   take the singles, which is what keeps every child at a sensible scale */
+.gallery-wide { grid-column: span 2; aspect-ratio: 8 / 3; }
+
+.gallery-item img {
+  width: auto;
+  height: 94%;
+  max-width: none;
+  display: block;
+  /* the shadow follows the cut-out alpha, so it is the child's silhouette on
+     the tile rather than a rectangle */
+  filter: drop-shadow(0 8px 12px rgba(59, 34, 23, 0.2));
+}
+.gallery-wide img { height: 88%; }
+
+@media (max-width: 760px) {
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  /* four of the five photographs are upright, and a 4:3 tile on a 172px column
+     left the children about 120px tall — too small to see a face. Upright
+     tiles on a phone give them nearly twice that. */
+  .gallery-item { aspect-ratio: 3 / 4; }
+  .gallery-wide { grid-column: span 2; aspect-ratio: 2 / 1; }
+}
+
 /* --------------------------------------------------- print */
 @media print {
   .nav-wrap, .wa-float, .carousel-nav, .btn { display: none !important; }
