@@ -2101,12 +2101,28 @@ li { margin-bottom: 0.45em; }
 }
 .gallery-wide img { height: 88%; }
 
+/* The About gallery holds cut-outs, which stand on a tinted floor at 94% of
+   the tile. These are drawings that carry their own ground and their own 4:3,
+   so they fill the tile edge to edge instead — same grid, same radius, same
+   hover, different fit. The drop-shadow goes with them: it traces the alpha,
+   which on a cut-out is the child and on a full-bleed drawing is a rectangle. */
+.gallery-art .gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: none;
+}
+
 @media (max-width: 760px) {
   .gallery { grid-template-columns: repeat(2, 1fr); }
   /* four of the five photographs are upright, and a 4:3 tile on a 172px column
      left the children about 120px tall — too small to see a face. Upright
      tiles on a phone give them nearly twice that. */
   .gallery-item { aspect-ratio: 3 / 4; }
+  /* that upright tile is for the cut-outs on the About page, which are upright
+     themselves. The drawings are 4:3, and cover was shearing the sides off
+     them — the blocks and the easel both lost an edge. */
+  .gallery-art .gallery-item { aspect-ratio: 4 / 3; }
   .gallery-wide { grid-column: span 2; aspect-ratio: 2 / 1; }
 }
 
