@@ -360,28 +360,6 @@ li { margin-bottom: 0.45em; }
   box-shadow: 0 -16px 44px rgba(59, 34, 23, 0.14);
 }
 
-/* --------------------------------------------------- the jumper on the seam
-   He sits on the sheet's top-left corner and hangs above it, breaking the line
-   where the sheet climbs over the pinned hero. .after-hero does no overflow
-   clipping, which is what lets him overhang its edge, and it sits at z-index 1
-   over the hero's 0, so he paints in front of everything in the hero without
-   needing a z-index of his own.
-
-   The offset is a negative `top` rather than a translate: the scroll animation
-   below owns `translate`, and a centring translate here would simply be
-   overwritten the moment the timeline took hold — the same trap the CTA pupil
-   fell into. -0.57 of the cast height is about 62% of his own, since .slot-jump
-   stands at 0.92.
-
-   .cast-slot sets position: relative further up the file, so this needs the
-   descendant selector to outrank it; a bare .jumper would lose on file order. */
-.after-hero .jumper {
-  --cast-h: clamp(152px, 15vw, 250px);
-  position: absolute;
-  left: calc(max(var(--gutter), (100% - 1440px) / 2) + 1.2rem);
-  top: calc(var(--cast-h) * -0.57);
-  pointer-events: none;
-}
 /* --------------------------------------------------- the pupil in the CTA
    She used to straddle the hero seam. The cast now stands along that floor,
    so she moved to the CTA panel, whose own overflow:hidden crops her cleanly
@@ -409,7 +387,7 @@ li { margin-bottom: 0.45em; }
 .cast {
   /* just the white sticker edge and a lift now — the brand colours moved to
      the floating stroke behind, which halves the filter passes as well */
-  --rim: 3px;
+  --rim: 2px;
   filter:
     drop-shadow(var(--rim) 0 0 #fff) drop-shadow(calc(var(--rim) * -1) 0 0 #fff)
     drop-shadow(0 var(--rim) 0 #fff) drop-shadow(0 calc(var(--rim) * -1) 0 #fff)
@@ -561,33 +539,36 @@ li { margin-bottom: 0.45em; }
    Absolutely positioned on purpose: four photographs must never be the thing
    that decides how tall the hero is. Letting a picture drive that height is
    the fault that put the wording below the fold twice already. */
-.hero-cast {
-  position: absolute;
-  inset: auto 0 0 0;
-  z-index: 3;
-  /* The cast is sized by HEIGHT, not width, because the headline's bottom edge
-     barely moves while the hero's height scales with the screen. Sizing them by
-     width made the overlap swing from +139px on a 1366x768 laptop to -123px on
-     a 1920x1080 monitor — the effect vanished entirely on big screens.
+/* --------------------------------------------------- the cast on the seam
+   All three stand on the line where the sheet climbs over the pinned hero,
+   not on the hero's own floor. The sheet does no overflow clipping and sits
+   at z-index 1 over the hero's 0, so they hang above that line as whole
+   figures and paint in front of everything in the hero.
 
-     First term: the wording block plus the clearance the halo needs at the
-     peak of its drift, so the tallest head always lands below the headline.
-     Second term: with two children the pair measures 1.39x the cast height,
-     so this coefficient is roughly half what it was for one — which is what
-     stops tablet portrait pressing them together until their strokes touch.
-     The 560px cap keeps them from growing to fill a large monitor. */
-  --cast-h: clamp(150px, min(calc(96lvh - 440px),
-                             calc(0.43 * min(100vw - 64px, 1440px))), 560px);
+   Sized to stand side by side without touching. With their height multipliers
+   the three together measure about 2.07x the row height, so at the 140px floor
+   they come to 310px -- inside the 367px a 390px phone leaves once the padding
+   is off. The 280px cap stops them growing into the sheet on a large monitor.
+
+   The offset is a negative `top`, not a translate: the scroll animation owns
+   translate and would overwrite a positioning one -- the trap the CTA pupil
+   fell into. */
+.seam-cast {
+  --cast-h: clamp(150px, 17vw, 280px);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--cast-h) * -0.55);
   display: flex;
   align-items: flex-end;
-  /* Two children now, one at each end of the floor. The right padding is the
-     graduate's approved position and stays at 12%; the left one is smaller so
-     the hand-raiser sits further into the corner the doodles used to have to
-     themselves. space-between plus percentages keeps both positions steady as
-     the pair grows and shrinks with the card. */
-  justify-content: space-between;
-  gap: 0;
-  padding-inline: 7% 12%;
+  /* Together, not spread. space-between put one at each corner of a 1425px
+     row with 400px of bare seam between them, which is not side by side. A
+     proportional gap keeps them a group at any width: about 12px apart on a
+     phone, 43px on a desktop. */
+  justify-content: center;
+  gap: clamp(0.5rem, 3vw, 4rem);
+  /* mirrors the hero card's own inset, so they line up with its edges */
+  padding-inline: calc(max(var(--gutter), (100% - 1440px) / 2) + 1.2rem);
   pointer-events: none;
 }
 
@@ -1723,8 +1704,7 @@ li { margin-bottom: 0.45em; }
     .after-hero { view-timeline-name: --cover; }
 
     .hero-media,
-    .hero-overlay,
-    .hero-cast {
+    .hero-overlay {
       animation-timeline: --cover;
       animation-timing-function: linear;
       animation-fill-mode: both;
@@ -1738,11 +1718,6 @@ li { margin-bottom: 0.45em; }
     .hero-media {
       animation-name: hero-card-away;
       animation-range: entry 15% entry 100%;
-    }
-
-    .hero-cast {
-      animation-name: hero-push-in;
-      animation-range: entry 0% entry 100%;
     }
 
     /* no `from` block anywhere below, so each animation starts from whatever
@@ -1800,11 +1775,15 @@ li { margin-bottom: 0.45em; }
 
        He also carries the cast's idle float, but that lives on the <img> while
        this drives the slot, so the two compose instead of overwriting. */
-    .jumper {
+    .seam-cast .cast-slot {
       animation: jump-ride linear both;
       animation-timeline: --cover;
       animation-range: entry 0% entry 100%;
     }
+    /* a little apart in time, so the row reads as three children rather than
+       one object sliding up */
+    .seam-cast .slot-hand { animation-range: entry 4% entry 100%; }
+    .seam-cast .slot-grad { animation-range: entry 8% entry 100%; }
     @keyframes jump-ride {
       from { translate: 0 2.6rem;  rotate: 4deg;  scale: 0.88; }
       to   { translate: 0 -2.4rem; rotate: -4deg; scale: 1.08; }
@@ -1968,10 +1947,6 @@ li { margin-bottom: 0.45em; }
      nothing to hide here. flex-shrink is off so they keep their size and let
      the card edges crop them, which reads as a crowd rather than a squeeze. */
   .cast-slot { flex-shrink: 0; }
-  /* Only two show here, so the four-wide budget above does not apply. Sized
-     so the pair overflow the card by a little and get cropped at its edges,
-     rather than by 218px, which had them swallowing the whole hero. */
-  .hero-cast { --cast-h: clamp(140px, calc(96lvh - 420px), 290px); }
   /* Twelve shapes read as a scene on a wide card and as clutter on a phone.
      The narrow column leaves exactly two gaps -- a strip beside the badge and
      the band between the headline and the graduate -- so five shapes stay and
@@ -1989,13 +1964,14 @@ li { margin-bottom: 0.45em; }
   .d-star-b  { left: 20%; right: auto; top: 45%; }
   .d-rainbow { left: 30%; top: 52%; bottom: auto; --dw: clamp(84px, 32vw, 150px); }
 
-  .hero-cast { justify-content: center; padding-inline: 2%; }
-  .cast-slot + .cast-slot { margin-left: -20%; }
+  /* side by side on the seam, so the overlap that let two large children
+     share a narrow card is gone */
+  .seam-cast { padding-inline: 3%; }
 
   /* the cut-outs are smaller here, so the same rim reads thicker: hold the
      proportion rather than the pixel */
   .pupil,
-  .cast { --rim: 2px; }
+  .cast { --rim: 1px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2039,12 +2015,6 @@ li { margin-bottom: 0.45em; }
   }
   .hero-overlay h1 { font-size: clamp(1.5rem, 3.2vw, 2.4rem); }
   .hero-badge { width: clamp(38px, 3.8vw, 56px); }
-  /* the compacted wording gives back about 90px, and it belongs to her: the
-     offset below is the wording block measured at this height, not the tall one */
-  .hero-cast {
-    --cast-h: clamp(150px, min(calc(96lvh - 345px),
-                               calc(0.43 * min(100vw - 64px, 1440px))), 560px);
-  }
   /* --cast-scale is gone: it existed to squeeze four children across a short
      window, and with two it only shrank them twice over. --cast-h already
      tracks the viewport height on its own. */
