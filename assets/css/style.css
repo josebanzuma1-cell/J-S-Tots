@@ -2096,6 +2096,25 @@ li { margin-bottom: 0.45em; }
   .gallery-wide { grid-column: span 2; aspect-ratio: 2 / 1; }
 }
 
+/* --------------------------------------------------- class level
+   Apricot, Lavender, Jasmine and Tulip are the school's own names for its
+   classes, but a parent looking for a place knows Baby, Middle and Top. Both
+   are shown: the flower is the heading, the level sits under it as a label.
+
+   A block of its own rather than a parenthesis inside the heading, so the
+   name keeps the display face and the heading's own size while the level
+   stays a quiet, fixed size at either heading level. */
+.class-level {
+  display: block;
+  margin-top: 0.4em;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 /* --------------------------------------------------- print */
 @media print {
   .nav-wrap, .wa-float, .carousel-nav, .btn { display: none !important; }
