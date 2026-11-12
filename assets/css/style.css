@@ -2140,6 +2140,52 @@ li { margin-bottom: 0.45em; }
   font-size: 0.92rem;
 }
 
+/* --------------------------------------------------- photograph rows
+   Two rows of photographs: the three Kids Activity shots under their cards,
+   and the pair on Admissions. Both crop to a fixed shape with object-fit, so
+   a portrait and a landscape frame can sit side by side without one of them
+   setting the row's height. */
+.activity-shots,
+.arrival-shots {
+  display: grid;
+  gap: clamp(0.7rem, 1.6vw, 1.2rem);
+  margin-top: clamp(1.4rem, 3vw, 2.4rem);
+}
+.activity-shots { grid-template-columns: repeat(3, 1fr); }
+.arrival-shots  { grid-template-columns: 1fr 1.35fr 1.35fr; }
+
+.activity-shots figure,
+.arrival-shots figure {
+  margin: 0;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-xs);
+}
+.activity-shots img,
+.arrival-shots img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.activity-shots figure { aspect-ratio: 4 / 3; }
+.arrival-shots figure  { aspect-ratio: 3 / 4; }
+.arrival-shots figure:not(:first-child) { aspect-ratio: 16 / 10; align-self: center; }
+
+/* a phone has no room for three across; the activity row halves and the
+   arrival pair stacks, so neither ends up as a row of stamps */
+/* One per row on a phone. Two across left each photograph 172px wide, which
+   is too small to make out a child, and the stairs shot is a portrait -- the
+   landscape crop took a horizontal slice out of the middle of it. Each keeps
+   its own shape instead. */
+@media (max-width: 760px) {
+  .activity-shots,
+  .arrival-shots { grid-template-columns: 1fr; }
+  .activity-shots figure { aspect-ratio: 16 / 10; }
+  .arrival-shots figure:first-child { aspect-ratio: 4 / 5; }
+  .arrival-shots figure:not(:first-child) { aspect-ratio: 16 / 10; }
+}
+
 /* --------------------------------------------------- print */
 @media print {
   .nav-wrap, .wa-float, .carousel-nav, .btn { display: none !important; }
