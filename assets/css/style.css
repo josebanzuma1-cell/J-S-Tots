@@ -2115,6 +2115,31 @@ li { margin-bottom: 0.45em; }
   color: var(--muted);
 }
 
+/* --------------------------------------------------- photographs in place
+   Two one-off frames: the staff on About and the signboard on Contact. Both
+   carry the same radius and shadow the rest of the site's media uses, so a
+   photograph does not arrive looking like a different component. */
+.staff-shot,
+.sign-shot {
+  margin: 0;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.staff-shot img,
+.sign-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.sign-shot { margin-top: 1.4rem; }
+.sign-shot figcaption {
+  padding: 0.7rem 1rem 0.9rem;
+  background: var(--cream-2);
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
 /* --------------------------------------------------- print */
 @media print {
   .nav-wrap, .wa-float, .carousel-nav, .btn { display: none !important; }
