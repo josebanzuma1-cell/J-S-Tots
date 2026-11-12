@@ -1,0 +1,61 @@
+# J & S Tots Pre-School — Hostinger (LiteSpeed/Apache)
+# Every block is wrapped in <IfModule> so a module the host does not load
+# makes the directive inert rather than throwing a 500.
+
+Options -Indexes
+DirectoryIndex index.html
+AddDefaultCharset UTF-8
+
+# ---------------------------------------------------------------- redirects
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # one address for the site: https, no www — which is what the canonical
+  # tags and the sitemap both say
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://jandstots.site%{REQUEST_URI} [L,R=301]
+
+  RewriteCond %{HTTP_HOST} ^www\.jandstots\.site$ [NC]
+  RewriteRule ^ https://jandstots.site%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ------------------------------------------------------------------- errors
+ErrorDocument 404 /404.html
+
+# -------------------------------------------------------------- mime types
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType image/svg+xml .svg
+  AddType application/xml .xml
+</IfModule>
+
+# -------------------------------------------------------------- compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+  # webp and jpeg are already compressed; running deflate over them costs CPU
+  # and saves nothing
+</IfModule>
+
+# ------------------------------------------------------------------ caching
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # the pictures and the logo are versioned by name, so they can sit a year
+  ExpiresByType image/webp    "access plus 1 year"
+  ExpiresByType image/jpeg    "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  # the stylesheet and script are not, so a day keeps edits visible
+  ExpiresByType text/css         "access plus 1 day"
+  ExpiresByType application/javascript "access plus 1 day"
+  # html must never be stale, or a change you push is invisible
+  ExpiresByType text/html     "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

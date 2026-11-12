@@ -14,3 +14,8 @@ node_modules/
 .claude/
 _inspo/
 *.log
+
+# Build output for the host: assembled from the files above, so it is a copy
+# rather than a source. Rebuild it rather than committing it.
+hostinger-upload/
+*.zip
