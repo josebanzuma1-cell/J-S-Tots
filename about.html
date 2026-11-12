@@ -3,6 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+/* The GitHub Pages copy is a mirror; jandstots.site is the real site, so
+   anything served from github.io bounces to the same page there. Runs before
+   the stylesheet so there is nothing to see first. A no-op on the real host,
+   and on localhost while the site is being worked on. */
+(function () {
+  if (!location.hostname.endsWith(".github.io")) return;
+  var path = location.pathname.replace(/^\/J-S-Tots/, "") || "/";
+  location.replace("https://jandstots.site" + path + location.search + location.hash);
+})();
+</script>
 <title>About us — J &amp; S Tots Pre-School, Munyonyo</title>
 <meta name="description" content="The mission, vision, focus and values of J &amp; S Tots Pre-School in Munyonyo, Kampala — bringing up a holistic child through quality, affordable early learning.">
 <meta name="theme-color" content="#faf3e6">
