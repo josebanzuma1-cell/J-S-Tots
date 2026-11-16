@@ -52,6 +52,32 @@ jobs:
             echo "FTP secrets are not set yet, so nothing was uploaded." >> "$GITHUB_STEP_SUMMARY"
           fi
 
+      # A 530 says the server rejected the credentials, but not why. These
+      # checks narrow it without putting anything secret in the log: the
+      # password's own length is never printed, because this repository is
+      # public and so are its logs. Invisible leading or trailing whitespace,
+      # picked up when copying, is the usual culprit.
+      - name: Check the credentials for invisible problems
+        if: steps.gate.outputs.ready == 'true'
+        env:
+          U: ${{ secrets.FTP_USERNAME }}
+          P: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          echo "username length: ${#U} (expected 25 for u475482088.jandstots.site)"
+          [ "${#U}" -eq 25 ] && echo "  -> matches" || echo "  -> DOES NOT MATCH, the username secret is wrong"
+          case "$U" in
+            [[:space:]]*) echo "  -> PROBLEM: username begins with whitespace" ;;
+          esac
+          case "$U" in
+            *[[:space:]]) echo "  -> PROBLEM: username ends with whitespace" ;;
+          esac
+          case "$P" in
+            [[:space:]]*) echo "password: PROBLEM, begins with whitespace" ;;
+            *[[:space:]]) echo "password: PROBLEM, ends with whitespace - almost certainly a stray newline from copying" ;;
+            *) echo "password: no stray whitespace at either end" ;;
+          esac
+          if [ "${#P}" -lt 8 ]; then echo "password: suspiciously short"; else echo "password: a plausible length"; fi
+
       - name: Check out the repository
         if: steps.gate.outputs.ready == 'true'
         uses: actions/checkout@v4
