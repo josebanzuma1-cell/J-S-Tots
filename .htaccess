@@ -10,6 +10,11 @@ AddDefaultCharset UTF-8
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # Git deployment copies the whole repository into public_html, so the clone's
+  # own .git directory can land here too. Serving it would hand out the entire
+  # history. Deny it before anything else in this file runs.
+  RewriteRule (^|/)\.(git|github)(/|$) - [F,L]
+
   # one address for the site: https, no www — which is what the canonical
   # tags and the sitemap both say
   RewriteCond %{HTTPS} !=on
@@ -59,3 +64,16 @@ ErrorDocument 404 /404.html
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
+
+# -------------------------------------------------- not part of the website
+# These deploy with the repository but are development files, not pages. They
+# hold nothing secret; they simply have no business being fetchable.
+<FilesMatch "^(server\.js|README\.md|CNAME|\.gitignore|\.nojekyll)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
