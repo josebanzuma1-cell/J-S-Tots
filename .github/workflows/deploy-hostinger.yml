@@ -1,0 +1,80 @@
+# Publishes the site to Hostinger over FTP on every push to main.
+#
+# This exists because Hostinger's own Git integration could not be completed:
+# its wizard runs in a popup window, and the deploy never reached public_html.
+# Everything here is configured in GitHub's own settings instead.
+#
+# Before it does anything, three secrets must exist under
+# Settings > Secrets and variables > Actions > Secrets:
+#
+#   FTP_SERVER    the FTP hostname, from hPanel > Files > FTP Accounts
+#   FTP_USERNAME  that FTP account's username
+#   FTP_PASSWORD  that FTP account's password
+#
+# Until all three are set the job finishes green having done nothing, so
+# adding this file does not produce a red cross on every push.
+#
+# One optional repository VARIABLE (same page, Variables tab):
+#
+#   FTP_SERVER_DIR  where public_html sits for that account. Defaults to
+#                   /public_html/. Some Hostinger FTP accounts are already
+#                   confined to public_html, and then this must be /
+#
+# If the connection is refused, suspect the protocol before anything else:
+# Hostinger serves explicit FTPS on port 21. Drop to plain "ftp" only as a
+# last resort, because that sends the password in the clear.
+
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# never let two uploads overlap; a half-finished sync is worse than a wait
+concurrency:
+  group: hostinger-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Secrets cannot be read in a job-level "if", so the gate has to be a
+      # step that writes an output the later steps test.
+      - name: Are the FTP secrets set?
+        id: gate
+        env:
+          CONFIGURED: ${{ secrets.FTP_SERVER != '' && secrets.FTP_USERNAME != '' && secrets.FTP_PASSWORD != '' }}
+        run: |
+          echo "ready=$CONFIGURED" >> "$GITHUB_OUTPUT"
+          if [ "$CONFIGURED" != "true" ]; then
+            echo "FTP secrets are not set yet, so nothing was uploaded." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Check out the repository
+        if: steps.gate.outputs.ready == 'true'
+        uses: actions/checkout@v4
+
+      - name: Upload the changed files to public_html
+        if: steps.gate.outputs.ready == 'true'
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          server-dir: ${{ vars.FTP_SERVER_DIR || '/public_html/' }}
+          # The repository is the website, minus the parts that only matter
+          # here. Giving an exclude list replaces the action's default, so the
+          # git patterns have to be repeated rather than assumed.
+          exclude: |
+            **/.git*
+            **/.git*/**
+            server.js
+            README.md
+            CNAME
+            .nojekyll
+            hostinger-upload/**
+            **/*.zip

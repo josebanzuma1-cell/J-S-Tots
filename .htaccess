@@ -68,7 +68,7 @@ ErrorDocument 404 /404.html
 # -------------------------------------------------- not part of the website
 # These deploy with the repository but are development files, not pages. They
 # hold nothing secret; they simply have no business being fetchable.
-<FilesMatch "^(server\.js|README\.md|CNAME|\.gitignore|\.nojekyll)$">
+<FilesMatch "^(server\.js|README\.md|CNAME|\.gitignore|\.nojekyll|\.ftp-deploy-sync-state\.json)$">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>
