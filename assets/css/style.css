@@ -2134,6 +2134,33 @@ li { margin-bottom: 0.45em; }
   height: auto;
 }
 .sign-shot { margin-top: 1.4rem; }
+
+/* ------------------------------------------------ the About page banner
+   A class group photograph in a wide letterbox. Every face in it sits
+   between roughly a quarter and three-fifths of the way down the frame:
+   the back row's heads begin at about 25%, the seated row's chins end at
+   about 57%. A centred cover-crop at this width shows 30% to 70%, which
+   is why it was slicing the tops off the back row.
+
+   16/5 keeps 47% of the height (1.5 natural / 3.2 box), and pulling the
+   window up to 38% places that band at 20%-67% -- the whole class, with
+   room above the tallest head and below the front row's chins.
+
+   A phone is narrow enough that the shape can simply be the photograph's
+   own 3/2, so there it crops nothing at all. */
+.about-banner {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 5;
+  object-fit: cover;
+  object-position: center 38%;
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 760px) {
+  .about-banner { aspect-ratio: 3 / 2; }
+}
 .sign-shot figcaption {
   padding: 0.7rem 1rem 0.9rem;
   background: var(--cream-2);
