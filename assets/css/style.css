@@ -100,6 +100,14 @@ a { color: inherit; text-decoration: none; }
 
 img, svg { max-width: 100%; display: block; }
 
+/* An image given a CSS width but no CSS height falls back to its HTML height
+   attribute, and is then squashed rather than scaled. That is how the section
+   photographs came to render 447x600 against a natural 900x600 -- half their
+   proper width, with the children stretched tall. Every other image rule here
+   sets its own height, so this changes only the ones that had none.
+   Deliberately not applied to svg, whose intrinsic sizing works differently. */
+img { height: auto; }
+
 ul, ol { margin: 0 0 1.1em; padding-left: 1.2em; }
 li { margin-bottom: 0.45em; }
 
@@ -875,13 +883,6 @@ li { margin-bottom: 0.45em; }
   display: block;
   margin-top: calc(var(--protrude) * -1);
   filter: drop-shadow(0 12px 16px rgba(59, 34, 23, 0.26));
-  /* .split-media img sets width: 100% and no height, so the HTML height
-     attribute is taken as the CSS height. The SVGs that rule was written for
-     letterbox inside that box and look unharmed; a photograph instead squashes
-     — this one rendered 554x505 against a natural 900x505, a 1.10 ratio where
-     it should be 1.78. Scoped here rather than fixed on .split-media img,
-     which would relayout the illustrations on three other pages. */
-  height: auto;
 }
 
 
