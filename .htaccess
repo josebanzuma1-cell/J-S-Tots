@@ -50,15 +50,20 @@ ErrorDocument 404 /404.html
   ExpiresByType image/webp    "access plus 1 year"
   ExpiresByType image/jpeg    "access plus 1 year"
   ExpiresByType image/svg+xml "access plus 1 year"
-  # the stylesheet and script are not, so a day keeps edits visible
-  ExpiresByType text/css         "access plus 1 day"
-  ExpiresByType application/javascript "access plus 1 day"
+  # The stylesheet and the script must revalidate rather than sit in a cache.
+  # The HTML is no-cache, so a page goes live the moment it deploys -- while a
+  # day-old stylesheet carried on styling it. New markup, old rules, for up to
+  # 24 hours, which is how a fix can be correct on the server and invisible in
+  # the browser. Revalidating costs one conditional request that answers 304
+  # when nothing has changed, and keeps the two in step.
+  ExpiresByType text/css               "access plus 0 seconds"
+  ExpiresByType application/javascript "access plus 0 seconds"
   # html must never be stale, or a change you push is invisible
   ExpiresByType text/html     "access plus 0 seconds"
 </IfModule>
 
 <IfModule mod_headers.c>
-  <FilesMatch "\.(html)$">
+  <FilesMatch "\.(html|css|js)$">
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
   Header always set X-Content-Type-Options "nosniff"
