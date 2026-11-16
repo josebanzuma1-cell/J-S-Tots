@@ -63,8 +63,8 @@ jobs:
           U: ${{ secrets.FTP_USERNAME }}
           P: ${{ secrets.FTP_PASSWORD }}
         run: |
-          echo "username length: ${#U} (expected 25 for u475482088.jandstots.site)"
-          [ "${#U}" -eq 25 ] && echo "  -> matches" || echo "  -> DOES NOT MATCH, the username secret is wrong"
+          echo "username length: ${#U} (expected 19 for u475482088.deployzz)"
+          [ "${#U}" -eq 19 ] && echo "  -> matches" || echo "  -> DOES NOT MATCH, the username secret is wrong"
           case "$U" in
             [[:space:]]*) echo "  -> PROBLEM: username begins with whitespace" ;;
           esac
