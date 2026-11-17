@@ -54,7 +54,10 @@
   --font-body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
   --nav-h: 80px;
   --h1: clamp(1.95rem, 5.6vw, 4.4rem);
-  --h2: clamp(1.95rem, 4vw, 3.1rem);
+  /* The minimum used to match --h1 exactly, so on every phone an h1 and an
+     h2 both landed on 31px and the hierarchy vanished. 4vw reaches 1.6rem at
+     640px, so nothing above a phone changes. */
+  --h2: clamp(1.6rem, 4vw, 3.1rem);
   --h3: clamp(1.35rem, 2.1vw, 1.8rem);
   --lede-size: clamp(1.02rem, 1.35vw, 1.2rem);
 
@@ -83,7 +86,11 @@ body {
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-weight: 700;
-  line-height: 1.1;
+  /* Leading that follows the size instead of a fixed ratio. A heading set at
+     26px on a phone wraps far more than the same words at 60px, so it needs
+     air between the lines; the desktop sizes still land near the 1.1 this
+     replaces (70px -> 1.09), while 26px opens up to 1.17. */
+  line-height: calc(1.05em + 3px);
   letter-spacing: -0.015em;
   margin: 0 0 0.6em;
   text-wrap: balance;
@@ -462,7 +469,11 @@ li { margin-bottom: 0.45em; }
   max-width: 17ch;
   font-size: clamp(2.1rem, 5.4vw, 4.25rem);
   letter-spacing: -0.03em;
-  line-height: 0.99;
+  /* 0.99 is a poster effect that only works large. The font-size clamp bottoms
+     out at 33.6px and stays there on every phone from 360 to 430 wide, where
+     lines set tighter than the letters are tall simply collide. This keeps
+     0.99 at the 68px desktop size and relaxes to 1.07 on a phone. */
+  line-height: calc(0.92em + 5px);
   text-shadow: 0 3px 22px rgba(110, 42, 10, 0.32);
 }
 
